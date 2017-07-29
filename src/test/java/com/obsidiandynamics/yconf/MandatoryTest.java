@@ -3,6 +3,7 @@ package com.obsidiandynamics.yconf;
 import static org.junit.Assert.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.junit.*;
 
@@ -28,16 +29,17 @@ public final class MandatoryTest {
   
   @Test
   public void testMapperNonNullValue() throws IOException {
+    final Map<String, String> dom = new HashMap<>();
+    dom.put("value", "test");
+    dom.put("error", "bad");
     final Object obj = new MappingContext()
-        .withParser(new SnakeyamlParser())
-        .fromString("{value: test, error: bad}", Mandatory.class);
+        .map(dom, Mandatory.class);
     assertEquals("test", obj);
   }
   
   @Test(expected=MissingValueException.class)
   public void testMapperNullValue() throws IOException {
     new MappingContext()
-    .withParser(new SnakeyamlParser())
-    .fromString("{error: bad}", Mandatory.class);
+    .map(Collections.singletonMap("error", "bad"), Mandatory.class);
   }
 }

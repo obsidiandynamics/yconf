@@ -3,6 +3,7 @@ package com.obsidiandynamics.yconf;
 import static org.junit.Assert.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.junit.*;
 
@@ -19,8 +20,7 @@ public final class SecretTest {
   public void testMapper() throws IOException {
     final String value = "truth";
     final Secret secret = new MappingContext()
-        .withParser(new SnakeyamlParser())
-        .fromString("{value: " + value + "}", Secret.class);
+        .map(Collections.singletonMap("value", value), Secret.class);
     assertNotNull(secret);
     assertEquals(value, Secret.unmask(secret));
   }
