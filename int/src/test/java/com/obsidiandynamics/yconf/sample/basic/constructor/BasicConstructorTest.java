@@ -14,8 +14,10 @@ import com.obsidiandynamics.yconf.*;
 public final class BasicConstructorTest {
   @Test
   public void test() throws IOException {
-    final Top top = new MappingContext().fromStream(BasicConstructorTest.class.getClassLoader()
-                                                    .getResourceAsStream("sample-basic.yaml"), Top.class);
+    final Top top = new MappingContext()
+        .withParser(new SnakeyamlParser())
+        .fromStream(BasicConstructorTest.class.getClassLoader()
+                    .getResourceAsStream("sample-basic.yaml"), Top.class);
     assertNotNull(top);
     assertEquals(3.14, top.aNumber, 0.0001);
     assertEquals("hello", top.aString);

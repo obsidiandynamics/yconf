@@ -82,7 +82,7 @@ public final class CoersingMapperTest {
   }
 
   private <T> void test(Object doc, Class<T> type, T expected) {
-    final MappingContext context = new MappingContext();
+    final MappingContext context = new MappingContext().withParser(new SnakeyamlParser());
     final Object mapped = context.map(doc, type);
     assertEquals(expected, mapped);
   }

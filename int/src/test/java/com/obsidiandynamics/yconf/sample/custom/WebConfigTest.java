@@ -12,10 +12,11 @@ import com.obsidiandynamics.yconf.*;
 public final class WebConfigTest {
   private static WebConfig load(String filename) throws IOException {
     return new MappingContext()
+        .withParser(new SnakeyamlParser())
         .fromStream(WebConfigTest.class.getClassLoader()
                     .getResourceAsStream(filename), WebConfig.class);
   }
-  
+
   @Test
   public void testGood() throws IOException, URISyntaxException {
     final WebConfig conf = load("sample-custom-good.yaml");
@@ -24,7 +25,7 @@ public final class WebConfigTest {
     assertEquals(new URI("ws://broker.acme.com/broker"), conf.servers.get("Message broker"));
     assertEquals(new URI("https://sd.acme.com"), conf.servers.get("Service discovery"));
   }
-  
+
   @Test(expected=MappingException.class)
   public void testDuplicate() throws IOException, URISyntaxException {
     load("sample-custom-duplicate.yaml");

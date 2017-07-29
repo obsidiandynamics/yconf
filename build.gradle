@@ -61,7 +61,6 @@ task jacocoRootReport(type: JacocoReport) {
 def packageName = 'yconf-core'
 
 dependencies {
-  compile 'org.yaml:snakeyaml:1.18'
 }
 
 jar {

@@ -75,6 +75,7 @@ public final class ArrayTest {
   @Test
   public void testField() throws IOException {
     final TestArrays t = new MappingContext()
+        .withParser(new SnakeyamlParser())
         .fromStream(ArrayTest.class.getClassLoader().getResourceAsStream("array-test.yaml"), TestArrays.class);
     checkAssertions(t);
   }
@@ -82,6 +83,7 @@ public final class ArrayTest {
   @Test
   public void testConstructor() throws IOException {
     final TestArraysConstructor t = new MappingContext()
+        .withParser(new SnakeyamlParser())
         .fromStream(ArrayTest.class.getClassLoader().getResourceAsStream("array-test.yaml"), TestArraysConstructor.class);
     checkAssertions(t);
   }

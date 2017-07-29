@@ -6,12 +6,12 @@ import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.yaml.snakeyaml.*;
-
 public final class MappingContext {
   private final Map<Class<?>, TypeMapper> mappers = new HashMap<>();
   
   private Function<Object, Object> domTransform = Function.identity();
+  
+  private Parser parser;
   
   public MappingContext() {
     withMappers(defaultMappers());
@@ -62,6 +62,11 @@ public final class MappingContext {
   
   Object transformDom(Object dom) {
     return domTransform.apply(dom);
+  }
+  
+  public MappingContext withParser(Parser parser) {
+    this.parser = parser;
+    return this;
   }
   
   public MappingContext withDomTransform(Function<Object, Object> domTransform) {
@@ -119,26 +124,25 @@ public final class MappingContext {
     }
   }
   
+  private void ensureParser() {
+    if (parser == null) throw new MappingException("Parser not assigned");
+  }
+  
   public <T> T fromStream(InputStream stream, Class<? extends T> type) throws IOException {
-    if (stream == null) throw new NullPointerException("Stream is null");
-    final Object root;
-    try (InputStream input = stream) {
-      root = new Yaml().load(input);
-    }
+    ensureParser();
+    final Object root = parser.load(this, new InputStreamReader(stream));
     return map(root, type);
   }
   
   public <T> T fromReader(Reader reader, Class<? extends T> type) throws IOException {
-    if (reader == null) throw new NullPointerException("Reader is null");
-    final Object root;
-    try (Reader input = reader) {
-      root = new Yaml().load(input);
-    }
+    ensureParser();
+    final Object root = parser.load(this, reader);
     return map(root, type);
   }
   
-  public <T> T fromString(String yaml, Class<? extends T> type) {
-    final Object root = new Yaml().load(yaml);
+  public <T> T fromString(String str, Class<? extends T> type) throws IOException {
+    ensureParser();
+    final Object root = parser.load(this, new StringReader(str));
     return map(root, type);
   }
 }

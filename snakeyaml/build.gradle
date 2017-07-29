@@ -1,0 +1,10 @@
+def packageName = 'yconf-snakeyaml'
+
+dependencies {
+  compile project(':')
+  compile 'org.yaml:snakeyaml:1.18'
+}
+
+jar {
+  baseName packageName
+}
