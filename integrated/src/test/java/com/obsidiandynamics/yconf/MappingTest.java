@@ -12,7 +12,7 @@ import org.junit.runners.*;
 import org.junit.runners.Parameterized.*;
 
 @RunWith(Parameterized.class)
-public final class MappingMultiFormatTest {
+public final class MappingTest {
   public interface FooBarIface {}
 
   public static final class FooBar implements FooBarIface {
@@ -201,7 +201,7 @@ public final class MappingMultiFormatTest {
                     .withTypeAttribute("_type")
                     .withTypeFormatter("com.obsidiandynamics.yconf."::concat))
         .withMapper(FooBar.class, (y, type) -> new FooBar(y.getAttribute("foo").map(Foo.class), y.mapAttribute("bar", Object.class)))
-        .fromStream(MappingMultiFormatTest.class.getClassLoader().getResourceAsStream(file), FooBarIface.class);
+        .fromStream(MappingTest.class.getClassLoader().getResourceAsStream(file), FooBarIface.class);
 
     final FooBar expected = new FooBar(new Foo("A string", 123, false), 
                                        new Bar(42, Arrays.asList(new Foo("Another string", 456, null),
@@ -215,7 +215,7 @@ public final class MappingMultiFormatTest {
   public void testWithoutMapper() throws IOException {
     final Object obj = new MappingContext()
         .withParser(parser)
-        .fromStream(MappingMultiFormatTest.class.getClassLoader().getResourceAsStream(file), FooBar.class);
+        .fromStream(MappingTest.class.getClassLoader().getResourceAsStream(file), FooBar.class);
     assertNotNull(obj);
     assertEquals(LinkedHashMap.class, obj.getClass());
   }

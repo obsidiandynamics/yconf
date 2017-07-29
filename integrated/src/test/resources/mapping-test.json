@@ -1,28 +1,28 @@
 {
-  "_type": "MappingMultiFormatTest$FooBar",
+  "_type": "MappingTest$FooBar",
   "foo": {
     "a": "A string",
     "b": 123.0,
     "c": false
   },
   "bar": {
-    "_type": "MappingMultiFormatTest$Bar",
+    "_type": "MappingTest$Bar",
     "num": 42,
     "items": [
       {
-        "_type": "MappingMultiFormatTest$Foo",
+        "_type": "MappingTest$Foo",
         "a": "Another string",
         "b": 456
       },
       {
-        "_type": "MappingMultiFormatTest$Foo",
+        "_type": "MappingTest$Foo",
         "a": null,
         "b": 789        
       },
       null,
       null,
       {
-        "_type": "MappingMultiFormatTest$Foo",
+        "_type": "MappingTest$Foo",
         "a": null,
         "b": 789        
       }
