@@ -1,0 +1,10 @@
+def packageName = 'yconf-gson'
+
+dependencies {
+  compile project(':')
+  compile 'com.google.code.gson:gson:2.8.0'
+}
+
+jar {
+  baseName packageName
+}

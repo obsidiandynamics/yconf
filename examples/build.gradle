@@ -1,0 +1,9 @@
+def packageName = 'yconf-examples'
+
+dependencies {
+  compile project(':yconf-snakeyaml')
+}
+
+jar {
+  baseName packageName
+}
