@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import junit.framework.*;
 
-public final class MappingTest {
+public final class BasicMappingTest {
   public void testWithoutMapperAttribute() throws IOException {
     final String yaml = "a: b";
     final Object obj = new MappingContext()
@@ -18,21 +18,6 @@ public final class MappingTest {
     final Map<String, String> expected = new LinkedHashMap<>();
     expected.put("a", "b");
     assertEquals(expected, obj);
-  }
-
-  @Test(expected=IllegalArgumentException.class)
-  public void testWrapObject() {
-    new YObject(new YObject("foo", new MappingContext()), null);
-  }
-
-  @Test
-  public void testObjectToString() {
-    assertEquals("foo", new YObject("foo", new MappingContext()).toString());
-  }
-
-  @Test(expected=NullPointerException.class)
-  public void testNullList() {
-    new YObject(null, null).asList();
   }
 
   @Test(expected=MappingException.class)
@@ -70,11 +55,6 @@ public final class MappingTest {
     new MappingContext()
     .withParser(new SnakeyamlParser())
     .fromString(yaml, Object.class);
-  }
-
-  @Test(expected=IllegalArgumentException.class)
-  public void testMapYObject() {
-    new MappingContext().map(new YObject(null, new MappingContext()), null);
   }
 
   @Test
