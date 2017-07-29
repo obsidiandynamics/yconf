@@ -3,9 +3,14 @@ package com.obsidiandynamics.yconf;
 import static org.junit.Assert.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.junit.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
+import org.junit.runners.Parameterized.*;
 
+@RunWith(Parameterized.class)
 public final class ArrayTest {
   @Y
   static final class Foo {
@@ -72,19 +77,33 @@ public final class ArrayTest {
     }
   }
 
+  @Parameters
+  public static Collection<Object[]> data() {
+    return Arrays.asList(new Object[][] {
+      { "array-test.json", new GsonParser() }, 
+      { "array-test.yaml", new SnakeyamlParser() }
+    });
+  }
+  
+  @Parameter(0)
+  public String file;
+
+  @Parameter(1)
+  public Parser parser;
+
   @Test
   public void testField() throws IOException {
     final TestArrays t = new MappingContext()
-        .withParser(new SnakeyamlParser())
-        .fromStream(ArrayTest.class.getClassLoader().getResourceAsStream("array-test.yaml"), TestArrays.class);
+        .withParser(parser)
+        .fromStream(ArrayTest.class.getClassLoader().getResourceAsStream(file), TestArrays.class);
     checkAssertions(t);
   }
 
   @Test
   public void testConstructor() throws IOException {
     final TestArraysConstructor t = new MappingContext()
-        .withParser(new SnakeyamlParser())
-        .fromStream(ArrayTest.class.getClassLoader().getResourceAsStream("array-test.yaml"), TestArraysConstructor.class);
+        .withParser(parser)
+        .fromStream(ArrayTest.class.getClassLoader().getResourceAsStream(file), TestArraysConstructor.class);
     checkAssertions(t);
   }
 

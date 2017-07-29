@@ -1,6 +1,7 @@
 def packageName = 'yconf-int'
 
 dependencies {
+  testCompile project(':yconf-gson')
   testCompile project(':yconf-snakeyaml')
 }
 

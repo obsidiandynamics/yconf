@@ -16,9 +16,7 @@ public final class SnakeyamlParser implements Parser {
   }
 
   @Override
-  public Object load(MappingContext context, Reader reader) throws IOException {
-    try (Reader input = reader) {
-      return yaml.load(input);
-    }
+  public Object load(Reader reader) throws IOException {
+    return yaml.load(reader);
   }
 }

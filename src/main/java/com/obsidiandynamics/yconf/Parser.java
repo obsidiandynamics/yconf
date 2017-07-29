@@ -4,5 +4,5 @@ import java.io.*;
 
 @FunctionalInterface
 public interface Parser {
-  Object load(MappingContext context, Reader reader) throws IOException;
+  Object load(Reader reader) throws IOException;
 }
