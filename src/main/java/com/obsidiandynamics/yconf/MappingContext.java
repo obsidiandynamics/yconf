@@ -6,8 +6,6 @@ import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
-import com.obsidiandynamics.yconf.CoercingMapper.*;
-
 public final class MappingContext {
   private final Map<Class<?>, TypeMapper> mappers = new HashMap<>();
   
@@ -30,8 +28,8 @@ public final class MappingContext {
     final Map<Class<?>, TypeMapper> mappers = new HashMap<>();
     mappers.put(boolean.class, new CoercingMapper(Boolean.class, Boolean::parseBoolean));
     mappers.put(Boolean.class, new CoercingMapper(Boolean.class, Boolean::parseBoolean));
-    mappers.put(byte.class, new CoercingMapper(Byte.class, stripTrailingDecimalFunc().then(Byte::parseByte)));
-    mappers.put(Byte.class, new CoercingMapper(Byte.class, stripTrailingDecimalFunc().then(Byte::parseByte)));
+    mappers.put(byte.class, new CoercingMapper(Byte.class, Byte::parseByte));
+    mappers.put(Byte.class, new CoercingMapper(Byte.class, Byte::parseByte));
     mappers.put(char.class, getCharMapper());
     mappers.put(Character.class, getCharMapper());
     mappers.put(Class.class, new CoercingMapper(Class.class, Class::forName));
@@ -39,37 +37,16 @@ public final class MappingContext {
     mappers.put(Double.class, new CoercingMapper(Double.class, Double::parseDouble));
     mappers.put(float.class, new CoercingMapper(Float.class, Float::parseFloat));
     mappers.put(Float.class, new CoercingMapper(Float.class, Float::parseFloat));
-    mappers.put(int.class, new CoercingMapper(Integer.class, stripTrailingDecimalFunc().then(Integer::parseInt)));
-    mappers.put(Integer.class, new CoercingMapper(Integer.class, stripTrailingDecimalFunc().then(Integer::parseInt)));
-    mappers.put(long.class, new CoercingMapper(Long.class, stripTrailingDecimalFunc().then(Long::parseLong)));
-    mappers.put(Long.class, new CoercingMapper(Long.class, stripTrailingDecimalFunc().then(Long::parseLong)));
+    mappers.put(int.class, new CoercingMapper(Integer.class, Integer::parseInt));
+    mappers.put(Integer.class, new CoercingMapper(Integer.class, Integer::parseInt));
+    mappers.put(long.class, new CoercingMapper(Long.class, Long::parseLong));
+    mappers.put(Long.class, new CoercingMapper(Long.class, Long::parseLong));
     mappers.put(Object.class, new RuntimeMapper());
-    mappers.put(short.class, new CoercingMapper(Short.class, stripTrailingDecimalFunc().then(Short::parseShort)));
-    mappers.put(Short.class, new CoercingMapper(Short.class, stripTrailingDecimalFunc().then(Short::parseShort)));
+    mappers.put(short.class, new CoercingMapper(Short.class, Short::parseShort));
+    mappers.put(Short.class, new CoercingMapper(Short.class, Short::parseShort));
     mappers.put(String.class, new CoercingMapper(String.class, s -> s));
     mappers.put(URL.class, new CoercingMapper(URL.class, URL::new));
     return mappers;
-  }
-  
-  @FunctionalInterface
-  private interface StringProcessor {
-    String process(String source);
-    
-    default <T> StringConverter<T> then(StringConverter<T> converter) {
-      return str -> converter.convert(process(str));
-    }
-  }
-  
-  private static StringProcessor stripTrailingDecimalFunc() {
-    return MappingContext::stripTrailingDecimal;
-  }
-  
-  private static String stripTrailingDecimal(String str) {
-    if (str.endsWith(".0")) {
-      return str.substring(0, str.length() - 2);
-    } else {
-      return str;
-    }
   }
   
   private TypeMapper getMapper(Class<?> type) {
