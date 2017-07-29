@@ -30,4 +30,9 @@ public final class WebConfigTest {
   public void testDuplicate() throws IOException, URISyntaxException {
     load("sample-custom-duplicate.yaml");
   }
+  
+  @Test(expected=MappingException.class)
+  public void testBadUri() throws IOException, URISyntaxException {
+    load("sample-custom-bad-uri.yaml");
+  }
 }

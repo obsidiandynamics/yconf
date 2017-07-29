@@ -3,5 +3,8 @@ rootProject.name = 'yconf'
 include 'yconf-snakeyaml'
 project(':yconf-snakeyaml').projectDir = new File(settingsDir, 'snakeyaml')
 
+include 'yconf-examples'
+project(':yconf-examples').projectDir = new File(settingsDir, 'examples')
+
 include 'yconf-int'
 project(':yconf-int').projectDir = new File(settingsDir, 'int')
