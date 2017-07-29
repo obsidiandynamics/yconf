@@ -9,5 +9,5 @@ project(':yconf-examples').projectDir = new File(settingsDir, 'examples')
 include 'yconf-gson'
 project(':yconf-gson').projectDir = new File(settingsDir, 'gson')
 
-include 'yconf-int'
-project(':yconf-int').projectDir = new File(settingsDir, 'int')
+include 'yconf-integrated'
+project(':yconf-integrated').projectDir = new File(settingsDir, 'integrated')

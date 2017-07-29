@@ -1,4 +1,4 @@
-def packageName = 'yconf-int'
+def packageName = 'yconf-integrated'
 
 dependencies {
   testCompile project(':yconf-gson')
