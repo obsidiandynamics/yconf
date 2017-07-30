@@ -17,6 +17,7 @@ public final class CoersingMapperTest {
   public void testByte() {
     test((byte) 127, Byte.class, (byte) 127);
     test("127", Byte.class, (byte) 127);
+    test("127.0", Byte.class, (byte) 127);
   }
   
   @Test
@@ -57,18 +58,21 @@ public final class CoersingMapperTest {
   public void testInteger() {
     test(1234, Integer.class, 1234);
     test("1234", Integer.class, 1234);
+    test("1234.0", Integer.class, 1234);
   }
   
   @Test
   public void testLong() {
     test(1234L, Long.class, 1234L);
     test("1234", Long.class, 1234L);
+    test("1234.0", Long.class, 1234L);
   }
   
   @Test
   public void testShort() {
     test((short) 1234, Short.class, (short) 1234);
     test("1234", Short.class, (short) 1234);
+    test("1234.0", Short.class, (short) 1234);
   }
   
   @Test

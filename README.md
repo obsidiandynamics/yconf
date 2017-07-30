@@ -314,10 +314,20 @@ Alternatively, if you don't want to (or can't) add an annotation to your class, 
 new MappingContext().withMapper(WebConfig.class, new WebConfig.Mapper())...
 ```
 
+# Parsing JSON
+Our previous examples have focused on YAML. To parse JSON instead, you need to include the `yconf-gson` module into your build script in place of `yconf-snakeyaml`. You also need to build your `MappingContext` using `.withParser(new GsonParser())`.
+
+## Number types
+There's one gotcha with Gson. By default, it coerces all typeless numbers to a `double` on the pretense that JSON doesn't support integral types. This will result in storing `double` values in `List`s and `Map`s, unless you use a custom `TypeMapper` and specify an explicit component type.
+
+So by default `GsonParser` will transform non-decimal `double`s back to `int`s or `long`s. If this isn't what you want (i.e. you'd rather stick with `double`s), Gson's default behaviour can be unmasked with `.withParser(new GsonParser().withFixDoubles(false))`.
+
+**Note:** Gson's default behaviour with respect to numbers results in a lossy decoding, as the 52-bit mantissa in an [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) `double` cannot accommodate the full 64-bit range of a `long`. We suspect the same behaviour may be present in other parsers. If you need to store numbers larger than +/- 2<sup>52</sup> in a JSON config, we suggest encoding the value in a string and decoding it with a custom type. The same technique should also be used for handling arbitrary-precision decimal numbers, such as currencies.
+
 # Writing Parsers
 YConf is built on a modular design, with each non-core component residing in a separate build module. If you'd like to contribute with a new parser, we ask that you please keep to this convention, as it improves testability and minimises transitive dependency conflicts (you only import what you need into your project).
 
-A `Parser` is simple functional interface, accepting a `Reader` and outputting a top-level DOM fragment.
+A `Parser` is simple functional interface, accepting a `Reader` and outputting a complete DOM graph.
 ```java
 @FunctionalInterface
 public interface Parser {
@@ -327,6 +337,6 @@ public interface Parser {
 
 Most off-the-shelf parsers already have a method akin to this. So in most cases, it's simply a matter of wrapping the underlying parser. 
 
-Sometimes you need to massage the resulting DOM into what YConf expects. Remember, the object graph needs to be either a scalar (a primitive or its boxed type), a `List<Object>` or a `Map<String, Object>`, where the `Object` element/value is either a scalar or again a `List`/`Map`. 
+Sometimes you need to massage the resulting DOM into what YConf expects. Remember, each node in the object graph needs to be either a scalar (a primitive or its boxed type), a `List<Object>` or a `Map<String, Object>`, where the `Object` element/value is either a scalar or again a `List`/`Map`.
 
-Another thing to watch out for is type precision. YConf expects all integral numbers to be a `long`, and all floating-point numbers a `double`. Some parsers (e.g. Gson) cut corners, by default coercing all typeless numbers to a `double` on the pretense that JSON doesn't support integral types. This is lossy, as the 52-bit mantissa in a [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) `double` cannot accommodate the full 64-bit range of a `long`. See [FixDoubles.java](https://github.com/obsidiandynamics/yconf/blob/master/gson/src/main/java/com/obsidiandynamics/yconf/FixDoubles.java) for an example on how YConf's Gson plugin recursively transforms non-decimal `double`s to `long`s in an object graph.
+Another thing to watch out for is [number types](#user-content-number-types). See [FixDoubles.java](https://github.com/obsidiandynamics/yconf/blob/master/gson/src/main/java/com/obsidiandynamics/yconf/FixDoubles.java) for an example on how YConf's Gson plugin recursively transforms non-decimal `double`s to `int`s and `long`s in an object graph.

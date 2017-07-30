@@ -6,6 +6,8 @@ import com.google.gson.*;
 
 public final class GsonParser implements Parser {
   private final Gson gson;
+  
+  private boolean fixDoubles = true;
 
   public GsonParser() {
     this(new GsonBuilder().disableHtmlEscaping().create());
@@ -14,10 +16,15 @@ public final class GsonParser implements Parser {
   public GsonParser(Gson gson) {
     this.gson = gson;
   }
+  
+  public GsonParser withFixDoubles(boolean fixDoubles) {
+    this.fixDoubles = fixDoubles;
+    return this;
+  }
 
   @Override
   public Object load(Reader reader) throws IOException {
     final Object orig = gson.fromJson(reader, Object.class);
-    return FixDoubles.fix(orig);
+    return fixDoubles ? FixDoubles.fix(orig) : orig;
   }
 }

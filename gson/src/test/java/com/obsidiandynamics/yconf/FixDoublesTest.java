@@ -2,6 +2,7 @@ package com.obsidiandynamics.yconf;
 
 import static org.junit.Assert.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.junit.*;
@@ -38,6 +39,20 @@ public final class FixDoublesTest {
   public void testMap() {
     assertEquals(singletonMap(Arrays.asList(8_000_000_000L)), 
                  singletonMap(FixDoubles.fix(Arrays.asList(8_000_000_000.0))));
+  }
+  
+  @Test
+  public void testParserFix() throws IOException {
+    final Object out = new GsonParser().withFixDoubles(true).load(new StringReader("123.0"));
+    assertEquals(Integer.class, out.getClass());
+    assertEquals(123, out);
+  }
+  
+  @Test
+  public void testParserNoFix() throws IOException {
+    final Object out = new GsonParser().withFixDoubles(false).load(new StringReader("123.0"));
+    assertEquals(Double.class, out.getClass());
+    assertEquals(123.0, out);
   }
   
   private static Map<?, ?> singletonMap(Object value) {
