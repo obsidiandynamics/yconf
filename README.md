@@ -5,7 +5,7 @@ Simple, elegant configuration.
 # About
 YConf is a mapping layer for a one-way conversion of structured documents (XML, JSON, YAML, etc.) into object graphs, specifically optimised for configuration scenarios. It is not a general-purpose object serialisation framework; instead, it's like an ORM for configuration artefacts.
 
-YConf currently supports YAML using the [SnakeYAML](https://bitbucket.org/asomov/snakeyaml) parser. Other document formats are on their way.
+YConf currently supports YAML using the [SnakeYAML](https://bitbucket.org/asomov/snakeyaml) parser and JSON using [Gson](https://github.com/google/gson). Other document formats and parsers are relatively trivial to add.
 
 ## Why not use _&lt;insert your favourite parser here&gt;_
 Parsers such as SnakeYAML, Jackson, Gson, Genson, XStream _et al._ already support bidirectional object serialisation. And they also support custom (de)serialisers. So why the middleman?
@@ -18,23 +18,21 @@ YConf standardises type mappings. Your team might support multiple projects with
 ## Getting YConf
 Gradle builds are hosted on JCenter. Just add the following snippet to your build file (replacing the version number in the snippet with the version shown on the Download badge at the top of this README).
 
-For Maven:
-
-```xml
-<dependency>
-  <groupId>com.obsidiandynamics.yconf</groupId>
-  <artifactId>yconf-core</artifactId>
-  <version>0.1.0</version>
-  <type>pom</type>
-</dependency>
-```
-
-For Gradle:
-
 ```groovy
 compile 'com.obsidiandynamics.yconf:yconf-core:0.1.0'
+compile 'com.obsidiandynamics.yconf:<module>:0.1.0'
 ```
 
+You need to add `yconf-core` and at least one other module, depending on the desired parser. The following is a list of available modules on JCenter.
+
+|Module name|Description|
+|-----------|-----------|
+|`yconf-core`|The core YConf library. Required for all deployments.|
+|`yconf-snakeyaml`|[Snakeyaml](https://bitbucket.org/asomov/snakeyaml) plugin for parsing YAML documents.|
+|`yconf-gson`|[Gson](https://github.com/google/gson) plugin, for parsing JSON documents.|
+|`yconf-juel`|[JUEL](http://juel.sourceforge.net/) plugin, supporting the Unified Expression Language (EL).|
+
+We're going to stick to YAML for our examples.
 
 ## Field injection
 Assume the following YAML file:
@@ -49,7 +47,7 @@ anObject:
   - c
 ```
 
-And the following Java classes:
+And the following Java class structure:
 ```java
 @Y
 public class Top {
@@ -75,8 +73,12 @@ public class Top {
 
 All it takes is the following to map from the document to the object model, storing the result in a variable named `top`:
 ```java
-final Top top = new MappingContext().fromStream(new FileInputStream("sample-basic.yaml"), Top.class);
+final Top top = new MappingContext()
+    .withParser(new SnakeyamlParser())
+    .fromStream(new FileInputStream("sample-basic.yaml"), Top.class);
 ```
+
+Note: we use `.withParser()` to specify the document parser. If using JSON, invoke `.withParser(new GsonParser())`.
 
 The `aString` field in our example provides a default value. So if the document omits a value for `aString`, the default assignment will remain. This is really convenient when your configuration has sensible defaults. Beware of one gotcha: if the document provides a value, but that value is `null`, this is treated as the absence of a value. So if `null` happens to be a valid value in your scenario, it would also have to be the default value.
 
@@ -307,7 +309,24 @@ We've embedded the mapper into the config class for convenience, and have refere
 
 **Note:** Classes referenced from `@Y` must be bean-instantiable. That is, they must be public, have a public no-arg constructor, and must not have an encapsulating instance. The latter is easy to overlook when using a nested class; make sure you're declaring your mapper with the `static` modifier if nesting within another type.
 
-Alternatively, if you don't (or can't) add an annotation to your class, the following snippet registers the type mapper directly with the context.
+Alternatively, if you don't want to (or can't) add an annotation to your class, the following snippet registers the type mapper directly with the context.
 ```java
 new MappingContext().withMapper(WebConfig.class, new WebConfig.Mapper())...
 ```
+
+# Writing Parsers
+YConf is built on a modular design, with each non-core component residing in a separate build module. If you'd like to contribute with a new parser, we ask that you please keep to this convention, as it improves testability and minimises transitive dependency conflicts (you only import what you need into your project).
+
+A `Parser` is simple functional interface, accepting a `Reader` and outputting a top-level DOM fragment.
+```java
+@FunctionalInterface
+public interface Parser {
+  Object load(Reader reader) throws IOException;
+}
+```
+
+Most off-the-shelf parsers already have a method akin to this. So in most cases, it's simply a matter of wrapping the underlying parser. 
+
+Sometimes you need to massage the resulting DOM into what YConf expects. Remember, the object graph needs to be either a scalar (a primitive or its boxed type), a `List<Object>` or a `Map<String, Object>`, where the `Object` element/value is either a scalar or again a `List`/`Map`. 
+
+Another thing to watch out for is type precision. YConf expects all integral numbers to be a `long`, and all floating-point numbers a `double`. Some parsers (e.g. Gson) cut corners, by default coercing all typeless numbers to a `double` on the pretense that JSON doesn't support integral types. This is lossy, as the 52-bit mantissa in a [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) `double` cannot accommodate the full 64-bit range of a `long`. See [FixDoubles.java](https://github.com/obsidiandynamics/yconf/blob/master/gson/src/main/java/com/obsidiandynamics/yconf/FixDoubles.java) for an example on how YConf's Gson plugin recursively transforms non-decimal `double`s to `long`s in an object graph.
