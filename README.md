@@ -15,23 +15,29 @@ YConf was designed to provide a parser-agnostic object mapper. With YConf you ca
 YConf standardises type mappings. Your team might support multiple projects with varying configuration needs - different formats, parsers and mappings. Rather than learning the intricacies of every parser, YConf provides a uniform mapping language that works across parsers and document formats.
 
 ## Parametrised Configuration
-That's all well and good, but is an abstraction layer really worth it? So here goes. By decoupling oneself from the parser, you aren't bounded by its limitations. For instance, can your parser do this?
+That's all well and good, but is an abstraction layer really worth it? So here goes. Decoupling yourself from the parser frees you from its limitations. For instance, can your parser do this?
 
 ```yaml
 indicators:
 - type: Stochatic
-  d: ${env.STOCH_D}
-  k: ${env.STOCH_K}
+  lookback: ${env.STO_LOOKBACK}
+  kPeriod: ${env.STO_K}
+  overbought: ${env.STO_OVERBOUGHT}
+  oversold: ${1 - env.STO_OVERBOUGHT}
 ```
 
-Look carefully. We've bootstrapped a stochastic oscillator, but the K and D coefficients aren't supplied in the config file; instead, they are taken from the environment variables `STOCH_D` and `STOCH_K`. This isn't something that YAML supports natively, but the `yconf-juel` plugin does this for us, using the Unified Expression Language (EL) to evaluate arbitrary expressions in the config. And it will work equally well with JSON, without changing a line of code:
+Look carefully. We've bootstrapped a stochastic oscillator, but the `lookback` and `kPeriod` coefficients aren't supplied in the config file; instead, they're taken from the environment variables `STO_LOOKBACK` and `STO_K`. And the fun doesn't end there. The `overbought` and `oversold` signals aren't just sourced from `env`. The `oversold` value is actually _derived_ from the `overbought` value. So if `overbought` is set to 80% (0.8), then `oversold` would get 20% (0.2).
+
+This isn't something that YAML supports natively, but the `yconf-juel` plugin does this for us effortlessly, using the Unified Expression Language (EL) to evaluate arbitrary expressions in the config. And it will work equally well with JSON, without changing a line of code.
 ```json
 {
   "indicators": [
     {
       "type": "Stochastic",
-      "d": "${env.STOCH_D}",
-      "k": "${env.STOCH_K}"
+      "lookback": "${env.STO_LOOKBACK}",
+      "kPeriod": "${env.STO_K}",
+      "overbought": "${env.STO_OVERBOUGHT}",
+      "oversold": "${1 - env.STO_OVERBOUGHT}"
     }
   ]
 }
