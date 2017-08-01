@@ -12,7 +12,30 @@ Parsers such as SnakeYAML, Jackson, Gson, Genson, XStream _et al._ already suppo
 
 YConf was designed to provide a parser-agnostic object mapper. With YConf you can switch from one document format to another, and your application is none the wiser. And importantly, your hand-crafted mapping code will continue to work regardless of the underlying library.
 
-YConf standardises type mappings. Your team might support multiple projects with varying configuration needs - different formats, parsers and mappings. Rather than learning the intricacies of every parser, YConf provides a uniform language that works across parsers.
+YConf standardises type mappings. Your team might support multiple projects with varying configuration needs - different formats, parsers and mappings. Rather than learning the intricacies of every parser, YConf provides a uniform mapping language that works across parsers and document formats.
+
+## Parametrised Configuration
+That's all well and good, but is an abstraction layer really worth it? So here goes. By decoupling oneself from the parser, you aren't bounded by its limitations. For instance, can your parser do this?
+
+```yaml
+indicators:
+- type: Stochatic
+  d: ${env.STOCH_D}
+  k: ${env.STOCH_K}
+```
+
+Look carefully. We've bootstrapped a stochastic oscillator, but the K and D coefficients aren't supplied in the config file; instead, they are taken from the environment variables `STOCH_D` and `STOCH_K`. This isn't something that YAML supports natively, but the `yconf-juel` plugin does this for us, using the Unified Expression Language (EL) to evaluate arbitrary expressions in the config. And it will work equally well with JSON, without changing a line of code:
+```json
+{
+  "indicators": [
+    {
+      "type": "Stochastic",
+      "d": "${env.STOCH_D}",
+      "k": "${env.STOCH_K}"
+    }
+  ]
+}
+```
 
 # Getting Started
 ## Getting YConf
