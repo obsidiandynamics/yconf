@@ -30,7 +30,7 @@ You need to add `yconf-core` and at least one other module, depending on the des
 |`yconf-core`|The core YConf library. Required for all deployments.|
 |`yconf-snakeyaml`|[Snakeyaml](https://bitbucket.org/asomov/snakeyaml) plugin for parsing YAML documents.|
 |`yconf-gson`|[Gson](https://github.com/google/gson) plugin, for parsing JSON documents.|
-|`yconf-juel`|[JUEL](http://juel.sourceforge.net/) plugin, supporting the Unified Expression Language (EL).|
+|`yconf-juel`|[JUEL](http://juel.sourceforge.net) plugin, supporting the Unified Expression Language (EL).|
 
 We're going to stick to YAML for our examples.
 

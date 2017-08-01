@@ -1,0 +1,11 @@
+def packageName = 'yconf-juel'
+
+dependencies {
+  compile project(':')
+  compile 'de.odysseus.juel:juel-api:2.2.7'
+  compile 'de.odysseus.juel:juel-impl:2.2.7'
+}
+
+jar {
+  baseName packageName
+}

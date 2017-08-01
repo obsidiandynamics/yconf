@@ -11,3 +11,6 @@ project(':yconf-gson').projectDir = new File(settingsDir, 'gson')
 
 include 'yconf-integrated'
 project(':yconf-integrated').projectDir = new File(settingsDir, 'integrated')
+
+include 'yconf-juel'
+project(':yconf-juel').projectDir = new File(settingsDir, 'juel')
