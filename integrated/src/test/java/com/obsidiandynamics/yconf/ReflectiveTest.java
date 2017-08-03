@@ -71,8 +71,8 @@ public final class ReflectiveTest {
   public void testInjectAttributesCustomConstruction() throws IOException {
     final CustomConstruction t = new MappingContext()
         .withParser(parser)
-        .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                    CustomConstruction.class);
+        .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file))
+        .map(CustomConstruction.class);
     checkAssertions(t);
     assertEquals(123, t.num);
   }
@@ -119,16 +119,16 @@ public final class ReflectiveTest {
   public void testReflectiveWrongType() throws IOException {
     new MappingContext()
     .withParser(parser)
-    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                TestWrongType.class);
+    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file))
+    .map(TestWrongType.class);
   }
 
   @Test(expected=MappingException.class)
   public void testReflectiveClassNotFound() throws IOException {
     new MappingContext()
     .withParser(parser)
-    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                TestClassNotFound.class);
+    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file))
+    .map(TestClassNotFound.class);
   }
   
   @Y(ReflectiveMapper.class)
@@ -141,8 +141,8 @@ public final class ReflectiveTest {
   public void testDefaultConstructor() throws IOException {
     final DefaultConstructor t = new MappingContext()
         .withParser(parser)
-        .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                    DefaultConstructor.class);
+        .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file))
+        .map(DefaultConstructor.class);
     checkAssertions(t);
     assertEquals(123, t.num);
   }
@@ -160,8 +160,8 @@ public final class ReflectiveTest {
   public void testAnnotatedConstructorMinimal() throws IOException {
     final AnnotatedConstructorMinimal t = new MappingContext()
         .withParser(parser)
-        .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                    AnnotatedConstructorMinimal.class);
+        .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file)) 
+        .map(AnnotatedConstructorMinimal.class);
     checkAssertions(t);
     assertEquals(123, t.num);
   }
@@ -191,8 +191,8 @@ public final class ReflectiveTest {
   public void testAnnotatedConstructorComplete() throws IOException {
     final AnnotatedConstructorComplete t = new MappingContext()
         .withParser(parser)
-        .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                    AnnotatedConstructorComplete.class);
+        .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file))
+        .map(AnnotatedConstructorComplete.class);
     checkAssertions(t);
     assertEquals(123, t.num);
   }
@@ -206,8 +206,8 @@ public final class ReflectiveTest {
   public void testAnnotatedConstructorNoName() throws IOException {
     new MappingContext()
     .withParser(parser)
-    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                AnnotatedConstructorNoName.class);
+    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file))
+    .map(AnnotatedConstructorNoName.class);
   }
 
   @Y(ReflectiveMapper.class)
@@ -219,8 +219,8 @@ public final class ReflectiveTest {
   public void testAnnotatedConstructorNoDefaultConstructor() throws IOException {
     new MappingContext()
     .withParser(parser)
-    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                AnnotatedConstructorNoDefaultConstructor.class);
+    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file)) 
+    .map(AnnotatedConstructorNoDefaultConstructor.class);
   }
 
   @Y(ReflectiveMapper.class)
@@ -232,8 +232,8 @@ public final class ReflectiveTest {
   public void testAnnotatedConstructorPartial() throws IOException {
     new MappingContext()
     .withParser(parser)
-    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                AnnotatedConstructorPartial.class);
+    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file))
+    .map(AnnotatedConstructorPartial.class);
   }
 
   @Y(ReflectiveMapper.class)
@@ -245,8 +245,8 @@ public final class ReflectiveTest {
   public void testAnnotatedConstructorPrivate() throws IOException {
     new MappingContext()
     .withParser(parser)
-    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                AnnotatedConstructorPrivate.class);
+    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file))
+    .map(AnnotatedConstructorPrivate.class);
   }
 
   @Y(ReflectiveMapper.class)
@@ -258,8 +258,8 @@ public final class ReflectiveTest {
   public void testAnnotatedConstructorIllegalArg() throws IOException {
     new MappingContext()
     .withParser(parser)
-    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                AnnotatedConstructorIllegalArg.class);
+    .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file))
+    .map(AnnotatedConstructorIllegalArg.class);
   }
 
   @Y
@@ -272,8 +272,8 @@ public final class ReflectiveTest {
   public void testAttributeDefaultValue() throws IOException {
     final AttributeDefaultValue t = new MappingContext()
         .withParser(parser)
-        .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file), 
-                    AttributeDefaultValue.class);
+        .fromStream(ReflectiveTest.class.getClassLoader().getResourceAsStream(file))
+        .map(AttributeDefaultValue.class);
     checkAssertions(t);
     assertEquals("defaultValue", t.defStr);
   }

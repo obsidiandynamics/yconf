@@ -201,7 +201,8 @@ public final class MappingTest {
                     .withTypeAttribute("_type")
                     .withTypeFormatter("com.obsidiandynamics.yconf."::concat))
         .withMapper(FooBar.class, (y, type) -> new FooBar(y.getAttribute("foo").map(Foo.class), y.mapAttribute("bar", Object.class)))
-        .fromStream(MappingTest.class.getClassLoader().getResourceAsStream(file), FooBarIface.class);
+        .fromStream(MappingTest.class.getClassLoader().getResourceAsStream(file))
+        .map(FooBarIface.class);
 
     final FooBar expected = new FooBar(new Foo("A string", 123, false), 
                                        new Bar(42, Arrays.asList(new Foo("Another string", 456, null),
@@ -215,7 +216,8 @@ public final class MappingTest {
   public void testWithoutMapper() throws IOException {
     final Object obj = new MappingContext()
         .withParser(parser)
-        .fromStream(MappingTest.class.getClassLoader().getResourceAsStream(file), FooBar.class);
+        .fromStream(MappingTest.class.getClassLoader().getResourceAsStream(file))
+        .map(FooBar.class);
     assertNotNull(obj);
     assertEquals(LinkedHashMap.class, obj.getClass());
   }

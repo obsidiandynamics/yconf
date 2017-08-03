@@ -168,16 +168,4 @@ public final class MappingContext {
     final Object root = parser.load(new StringReader(str));
     return new YObject(root, this);
   }
-  
-  public <T> T fromStream(InputStream stream, Class<? extends T> type) throws IOException {
-    return fromStream(stream).map(type);
-  }
-  
-  public <T> T fromReader(Reader reader, Class<? extends T> type) throws IOException {
-    return fromReader(reader).map(type);
-  }
-  
-  public <T> T fromString(String str, Class<? extends T> type) throws IOException {
-    return fromString(str).map(type);
-  }
 }

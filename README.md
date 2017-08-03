@@ -128,10 +128,13 @@ All it takes is the following to map from the document to the object model, stor
 final Top top = new MappingContext()
     .withParser(new SnakeyamlParser())
     .withDomTransform(new JuelTransform())
-    .fromStream(new FileInputStream("sample-basic.yaml"), Top.class);
+    .fromStream(new FileInputStream("sample-basic.yaml"))
+    .map(Top.class);
 ```
 
 Note: we use `.withParser()` to specify the document parser. If using JSON, invoke `.withParser(new GsonParser())`. We also use JUEL for our DOM transform, which automatically evaluates EL expressions present in the document.
+
+The result of calling `.fromStream()` is a `YObject` instance, which encapsulates the document object model (DOM) - essentially an object graph derived from the underlying file. This isn't yet what we need. So the last call in the chain is `.map()`, which does the _actual_ work - mapping the DOM to the given `Class` type.
 
 The `aString` field in our example provides a default value. So if the document omits a value for `aString`, the default assignment will remain. This is really convenient when your configuration has sensible defaults. Beware of one gotcha: if the document provides a value, but that value is `null`, this is treated as the absence of a value. So if `null` happens to be a valid value in your scenario, it would also have to be the default value.
 

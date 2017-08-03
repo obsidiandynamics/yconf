@@ -95,7 +95,8 @@ public final class ArrayTest {
   public void testField() throws IOException {
     final TestArrays t = new MappingContext()
         .withParser(parser)
-        .fromStream(ArrayTest.class.getClassLoader().getResourceAsStream(file), TestArrays.class);
+        .fromStream(ArrayTest.class.getClassLoader().getResourceAsStream(file))
+        .map(TestArrays.class);
     checkAssertions(t);
   }
 
@@ -103,7 +104,8 @@ public final class ArrayTest {
   public void testConstructor() throws IOException {
     final TestArraysConstructor t = new MappingContext()
         .withParser(parser)
-        .fromStream(ArrayTest.class.getClassLoader().getResourceAsStream(file), TestArraysConstructor.class);
+        .fromStream(ArrayTest.class.getClassLoader().getResourceAsStream(file))
+        .map(TestArraysConstructor.class);
     checkAssertions(t);
   }
 

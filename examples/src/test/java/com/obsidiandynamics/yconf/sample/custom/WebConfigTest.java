@@ -13,8 +13,8 @@ public final class WebConfigTest {
   private static WebConfig load(String filename) throws IOException {
     return new MappingContext()
         .withParser(new SnakeyamlParser())
-        .fromStream(WebConfigTest.class.getClassLoader()
-                    .getResourceAsStream(filename), WebConfig.class);
+        .fromStream(WebConfigTest.class.getClassLoader().getResourceAsStream(filename))
+        .map(WebConfig.class);
   }
 
   @Test

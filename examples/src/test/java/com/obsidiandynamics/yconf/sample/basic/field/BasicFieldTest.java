@@ -17,8 +17,8 @@ public final class BasicFieldTest {
     final Top top = new MappingContext()
         .withParser(new SnakeyamlParser())
         .withDomTransform(new JuelTransform())
-        .fromStream(BasicFieldTest.class.getClassLoader()
-                    .getResourceAsStream("sample-basic.yaml"), Top.class);
+        .fromStream(BasicFieldTest.class.getClassLoader().getResourceAsStream("sample-basic.yaml"))
+        .map(Top.class);
     assertNotNull(top);
     assertEquals(3.14, top.aNumber, 0.0001);
     assertEquals("hello", top.aString);

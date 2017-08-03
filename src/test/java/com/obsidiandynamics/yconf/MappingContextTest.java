@@ -9,7 +9,7 @@ import junit.framework.*;
 public final class MappingContextTest {
   @Test(expected=MappingException.class)
   public void testNoParser() throws IOException {
-    new MappingContext().fromString("", Object.class);
+    new MappingContext().fromString("").map(Object.class);
   }
 
   @Test
@@ -22,7 +22,8 @@ public final class MappingContextTest {
       TestCase.assertEquals(doc, line);
       return line;
     })
-    .fromString(doc, Object.class);
+    .fromString(doc)
+    .map(Object.class);
   }
 
   @Test
@@ -35,6 +36,7 @@ public final class MappingContextTest {
       TestCase.assertEquals(doc, line);
       return line;
     })
-    .fromReader(new StringReader(doc), Object.class);
+    .fromReader(new StringReader(doc))
+    .map(Object.class);
   }
 }

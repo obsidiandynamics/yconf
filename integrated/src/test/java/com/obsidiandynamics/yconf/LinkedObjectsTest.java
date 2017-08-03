@@ -24,7 +24,8 @@ public final class LinkedObjectsTest {
     final LinkFrom from = new MappingContext()
         .withParser(new SnakeyamlParser())
         .withDomTransform(new JuelTransform())
-        .fromStream(LinkedObjectsTest.class.getClassLoader().getResourceAsStream("link-from.yaml"), LinkFrom.class);
+        .fromStream(LinkedObjectsTest.class.getClassLoader().getResourceAsStream("link-from.yaml"))
+        .map(LinkFrom.class);
     assertNotNull(from);
     assertNotNull(from.link);
     final LinkTo to = (LinkTo) from.link;
