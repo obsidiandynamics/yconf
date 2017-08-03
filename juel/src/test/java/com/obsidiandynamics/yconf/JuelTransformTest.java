@@ -1,44 +1,44 @@
-package com.obsidiandynamics.juel;
+package com.obsidiandynamics.yconf;
 
 import static org.junit.Assert.*;
 
 import org.junit.*;
 
-public final class ELTransformTest {
+public final class JuelTransformTest {
   @Test
   public void testNonString() {
     final Object in = new Object();
-    final Object out = new ELTransform().apply(in);
+    final Object out = new JuelTransform().transform(in, new MappingContext());
     assertEquals(in, out);
   }
   
   @Test
   public void testVariable() {
-    final Object out = new ELTransform()
+    final Object out = new JuelTransform()
         .withVariable("foo", "bar")
-        .apply("${foo}");
+        .transform("${foo}", new MappingContext());
     assertEquals("bar", out);
   }
   
   @Test
   public void testFunctionNoNamespace() throws NoSuchMethodException, SecurityException {
-    final Object out = new ELTransform()
+    final Object out = new JuelTransform()
         .withFunction("round", Math.class.getMethod("round", double.class))
-        .apply("${round(12.34)}");
+        .transform("${round(round(12.34))}", new MappingContext());
     assertEquals(12L, out);
   }
   
   @Test
   public void testFunctionNamespace() throws NoSuchMethodException, SecurityException {
-    final Object out = new ELTransform()
+    final Object out = new JuelTransform()
         .withFunction("math", "round", Math.class.getMethod("round", double.class))
-        .apply("${math:round(12.34)}");
+        .transform("${math:round(12.34)}", new MappingContext());
     assertEquals(12L, out);
   }
   
   @Test(expected=RuntimeException.class)
   public void testConfiguratorException() {
-    new ELTransform().configure(t -> {
+    new JuelTransform().configure(t -> {
       throw new Exception();
     });
   }

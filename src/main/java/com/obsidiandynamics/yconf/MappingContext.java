@@ -4,14 +4,13 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
-import java.util.function.*;
 
 import com.obsidiandynamics.yconf.CoercingMapper.*;
 
 public final class MappingContext {
   private final Map<Class<?>, TypeMapper> mappers = new HashMap<>();
   
-  private Function<Object, Object> domTransform = Function.identity();
+  private DomTransform domTransform = (dom, context) -> dom;
   
   private Parser parser;
   
@@ -47,6 +46,7 @@ public final class MappingContext {
     mappers.put(short.class, new CoercingMapper(Short.class, stripTrailingDecimalFunc().then(Short::parseShort)));
     mappers.put(Short.class, new CoercingMapper(Short.class, stripTrailingDecimalFunc().then(Short::parseShort)));
     mappers.put(String.class, new CoercingMapper(String.class, s -> s));
+    mappers.put(URI.class, new CoercingMapper(URI.class, URI::new));
     mappers.put(URL.class, new CoercingMapper(URL.class, URL::new));
     return mappers;
   }
@@ -84,7 +84,7 @@ public final class MappingContext {
   }
   
   Object transformDom(Object dom) {
-    return domTransform.apply(dom);
+    return domTransform.transform(dom, this);
   }
   
   public MappingContext withParser(Parser parser) {
@@ -92,7 +92,7 @@ public final class MappingContext {
     return this;
   }
   
-  public MappingContext withDomTransform(Function<Object, Object> domTransform) {
+  public MappingContext withDomTransform(DomTransform domTransform) {
     this.domTransform = domTransform;
     return this;
   }
@@ -126,7 +126,7 @@ public final class MappingContext {
     }
   }
   
-  public <T> T map(Object dom, Class<? extends T> type) {
+  <T> T map(Object dom, Class<? extends T> type) {
     if (dom instanceof YObject) throw new IllegalArgumentException("Cannot map an instance of " + YObject.class.getSimpleName());
 
     if (dom == null) return null;
@@ -151,21 +151,33 @@ public final class MappingContext {
     if (parser == null) throw new MappingException("Parser not assigned");
   }
   
-  public <T> T fromStream(InputStream stream, Class<? extends T> type) throws IOException {
+  public YObject fromStream(InputStream stream) throws IOException {
     ensureParser();
     final Object root = parser.load(new InputStreamReader(stream));
-    return map(root, type);
+    return new YObject(root, this);
+  }
+  
+  public YObject fromReader(Reader reader) throws IOException {
+    ensureParser();
+    final Object root = parser.load(reader);
+    return new YObject(root, this);
+  }
+  
+  public YObject fromString(String str) throws IOException {
+    ensureParser();
+    final Object root = parser.load(new StringReader(str));
+    return new YObject(root, this);
+  }
+  
+  public <T> T fromStream(InputStream stream, Class<? extends T> type) throws IOException {
+    return fromStream(stream).map(type);
   }
   
   public <T> T fromReader(Reader reader, Class<? extends T> type) throws IOException {
-    ensureParser();
-    final Object root = parser.load(reader);
-    return map(root, type);
+    return fromReader(reader).map(type);
   }
   
   public <T> T fromString(String str, Class<? extends T> type) throws IOException {
-    ensureParser();
-    final Object root = parser.load(new StringReader(str));
-    return map(root, type);
+    return fromString(str).map(type);
   }
 }

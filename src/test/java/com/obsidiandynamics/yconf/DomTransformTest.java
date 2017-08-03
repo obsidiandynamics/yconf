@@ -3,13 +3,12 @@ package com.obsidiandynamics.yconf;
 import static junit.framework.TestCase.*;
 
 import java.util.*;
-import java.util.function.*;
 import java.util.stream.*;
 
 import org.junit.*;
 
 public final class DomTransformTest {
-  private static final Function<Object, Object> STRING_CAPITALIZER = dom -> {
+  private static final DomTransform STRING_CAPITALIZER = (dom, context) -> {
     if (dom instanceof String) {
       return ((String) dom).toUpperCase();
     } else {
