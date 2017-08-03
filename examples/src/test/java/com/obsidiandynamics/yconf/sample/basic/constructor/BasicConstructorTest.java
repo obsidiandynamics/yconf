@@ -16,6 +16,7 @@ public final class BasicConstructorTest {
   public void test() throws IOException {
     final Top top = new MappingContext()
         .withParser(new SnakeyamlParser())
+        .withDomTransform(new JuelTransform())
         .fromStream(BasicConstructorTest.class.getClassLoader()
                     .getResourceAsStream("sample-basic.yaml"), Top.class);
     assertNotNull(top);

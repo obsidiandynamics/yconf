@@ -1,6 +1,7 @@
 def packageName = 'yconf-examples'
 
 dependencies {
+  compile project(':yconf-juel')
   compile project(':yconf-snakeyaml')
 }
 

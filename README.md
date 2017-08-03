@@ -43,6 +43,24 @@ This isn't something that YAML supports natively, but the `yconf-juel` plugin do
 }
 ```
 
+## Linking Files
+We've all seen jumbo sized configuration files that grow out of control. The example below is YConf's solution to this problem.
+```yaml
+indicators:
+- ${session.link('indicators/stochastic.yaml')}
+- ${session.link('indicators/macd.yaml')}
+- ${session.link('indicators/bollinger.yaml')}
+```
+
+In our example, `indicators/stochastic.yaml` is a simple YAML snippet containing nothing but the Stochastic Oscillator configuration.
+```yaml
+type: Stochatic
+lookback: ${env.STO_LOOKBACK}
+kPeriod: ${env.STO_K}
+overbought: ${env.STO_OVERBOUGHT}
+oversold: ${1 - env.STO_OVERBOUGHT}
+```
+
 # Getting Started
 ## Getting YConf
 Gradle builds are hosted on JCenter. Just add the following snippet to your build file (replacing the version number in the snippet with the version shown on the Download badge at the top of this README).
@@ -61,13 +79,18 @@ You need to add `yconf-core` and at least one other module, depending on the des
 |`yconf-gson`|[Gson](https://github.com/google/gson) plugin, for parsing JSON documents.|
 |`yconf-juel`|[JUEL](http://juel.sourceforge.net) plugin, supporting the Unified Expression Language (EL).|
 
-We're going to stick to YAML for our examples.
+We're going to stick to YAML for our examples. Our sample Gradle dependencies resemble the following:
+```groovy
+compile 'com.obsidiandynamics.yconf:yconf-core:0.1.0'
+compile 'com.obsidiandynamics.yconf:yconf-juel:0.1.0'
+compile 'com.obsidiandynamics.yconf:yconf-snakeyaml:0.1.0'
+```
 
 ## Field injection
 Assume the following YAML file:
 ```yaml
 aString: hello
-aNumber: 3.14
+aNumber: ${3 + 0.14}
 anObject:
   aBool: true
   anArray:
@@ -104,10 +127,11 @@ All it takes is the following to map from the document to the object model, stor
 ```java
 final Top top = new MappingContext()
     .withParser(new SnakeyamlParser())
+    .withDomTransform(new JuelTransform())
     .fromStream(new FileInputStream("sample-basic.yaml"), Top.class);
 ```
 
-Note: we use `.withParser()` to specify the document parser. If using JSON, invoke `.withParser(new GsonParser())`.
+Note: we use `.withParser()` to specify the document parser. If using JSON, invoke `.withParser(new GsonParser())`. We also use JUEL for our DOM transform, which automatically evaluates EL expressions present in the document.
 
 The `aString` field in our example provides a default value. So if the document omits a value for `aString`, the default assignment will remain. This is really convenient when your configuration has sensible defaults. Beware of one gotcha: if the document provides a value, but that value is `null`, this is treated as the absence of a value. So if `null` happens to be a valid value in your scenario, it would also have to be the default value.
 
