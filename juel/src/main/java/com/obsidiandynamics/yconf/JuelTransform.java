@@ -55,12 +55,16 @@ public final class JuelTransform implements DomTransform {
   public Object transform(Object dom, MappingContext context) {
     if (dom instanceof String) {
       final String str = (String) dom;
-      final boolean assigned = session.setLocalContext(context);
-      try {
-        final ValueExpression expr = factory.createValueExpression(elContext, str, Object.class);
-        return expr.getValue(elContext);
-      } finally {
-        if (assigned) session.clearLocalContext();
+      if (str.contains("${")) {
+        final boolean assigned = session.setLocalContext(context);
+        try {
+          final ValueExpression expr = factory.createValueExpression(elContext, str, Object.class);
+          return expr.getValue(elContext);
+        } finally {
+          if (assigned) session.clearLocalContext();
+        }
+      } else {
+        return dom;
       }
     } else {
       return dom;

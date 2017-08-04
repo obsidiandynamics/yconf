@@ -1,0 +1,3 @@
+{
+  "link": "${session.link('src/test/resources/link-to.json')}"
+}

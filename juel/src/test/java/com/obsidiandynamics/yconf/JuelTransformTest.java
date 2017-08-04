@@ -11,6 +11,13 @@ public final class JuelTransformTest {
     final Object out = new JuelTransform().transform(in, new MappingContext());
     assertEquals(in, out);
   }
+
+  @Test
+  public void testPlainString() {
+    final Object in = "Hello";
+    final Object out = new JuelTransform().transform(in, new MappingContext());
+    assertEquals(in, out);
+  }
   
   @Test
   public void testVariable() {

@@ -132,9 +132,9 @@ final Top top = new MappingContext()
     .map(Top.class);
 ```
 
-Note: we use `.withParser()` to specify the document parser. If using JSON, invoke `.withParser(new GsonParser())`. We also use JUEL for our DOM transform, which automatically evaluates EL expressions present in the document.
+Note: we use `.withParser()` to specify the document parser. If using JSON, invoke `.withParser(new GsonParser())`. We've also used JUEL for our DOM transform, which automatically evaluates EL expressions present in the document.
 
-The result of calling `.fromStream()` is a `YObject` instance, which encapsulates the document object model (DOM) - essentially an object graph derived from the underlying file. This isn't yet what we need. So the last call in the chain is `.map()`, which does the _actual_ work - mapping the DOM to the given `Class` type.
+The result of calling `.fromStream()` is a `YObject` instance, which encapsulates the root document object model (DOM) - essentially an object graph derived from the underlying file. This isn't yet what we need. So the last call in the chain is `.map()`, which does the _actual_ work - mapping the DOM to the given `Class` type.
 
 The `aString` field in our example provides a default value. So if the document omits a value for `aString`, the default assignment will remain. This is really convenient when your configuration has sensible defaults. Beware of one gotcha: if the document provides a value, but that value is `null`, this is treated as the absence of a value. So if `null` happens to be a valid value in your scenario, it would also have to be the default value.
 
@@ -201,7 +201,7 @@ The earlier examples assume that the configuration corresponds, more or less, to
 ## Type mapping 101
 We need to dissect some of the underlying mechanisms before we go any further. At the heart of YConf there are three main classes:
 
-* `MappingContext` - Holds contextual data about the current mapping session, as well as settings - a registry of type mappers and DOM transforms. When you need to change YConf's behaviour, this is the class you use.
+* `MappingContext` - Holds contextual data about the current mapping session, as well as settings - a registry of type mappers and DOM transforms. When you need to change YConf's behaviour, this is the class you turn to.
 * `YObject` - A wrapper around a section of the underlying document object model (DOM) which, in turn, is the raw output of the parser. If you can visualise the entire DOM as a tree that will be mapped to the root of your resulting object graph, a `YObject` will house a subtree that corresponds to the current point in the graph where the mapper is currently operating.
 * `TypeMapper` - An interface specifying how a `YObject` is mapped to an output object. This is YConf's main extension point - allowing you to specify custom mapping behaviour.
 
