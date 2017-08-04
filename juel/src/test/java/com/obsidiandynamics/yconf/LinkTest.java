@@ -31,7 +31,7 @@ public final class LinkTest {
         .withParser(new TopLineParser())
         .withDomTransform(new JuelTransform());
     
-    final YObject y = new YObject(Collections.singletonMap("key", "${session.link('src/test/resources/link-test.txt')}"), context);
+    final YObject y = new YObject(Collections.singletonMap("key", "${session.link('src/test/resources/link-test-from.txt')}"), context);
     final String out = y.mapAttribute("key", String.class);
     assertEquals("Linked content", out);
   }
@@ -42,7 +42,7 @@ public final class LinkTest {
         .withParser(new CorruptParser())
         .withDomTransform(new JuelTransform());
     
-    final YObject y = new YObject(Collections.singletonMap("key", "${session.link('src/test/resources/link-test.txt')}"), context);
+    final YObject y = new YObject(Collections.singletonMap("key", "${session.link('src/test/resources/link-test-from.txt')}"), context);
     final String out = y.mapAttribute("key", String.class);
     assertEquals("Linked content", out);
   }

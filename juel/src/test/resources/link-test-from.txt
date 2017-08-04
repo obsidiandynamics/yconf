@@ -1,0 +1,1 @@
+${session.link('src/test/resources/link-test-mid.txt')}
