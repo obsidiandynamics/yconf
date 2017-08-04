@@ -4,12 +4,27 @@ plugins {
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
+group = 'com.obsidiandynamics.yconf'
+version = '0.1.0'
+  
+def envUser = 'BINTRAY_USER'
+def envKey = 'BINTRAY_KEY'
+task bintrayCredentialsCheck {
+  doLast {
+    if (System.getenv(envUser) == null) {
+      throw new GradleException("No Bintray username specified; set with 'export ${envUser}=<username>'")
+    }
+    if (System.getenv(envKey) == null) {
+      throw new GradleException("No Bintray key specified; set with 'export ${envKey}=<key>'")
+    }
+  }
+}
+
 allprojects {
   apply plugin: 'java'
   apply plugin: 'jacoco'
-
-  group = project(':').group
-  version = project(':').version
+  apply plugin: 'maven-publish'
+  apply plugin: 'com.jfrog.bintray'
 
   repositories {
     jcenter()
@@ -32,6 +47,11 @@ allprojects {
       xml.enabled = true
       csv.enabled = false
     }
+  }
+
+  // invoke this task when ready to publish to Bintray
+  bintrayUpload {
+    dependsOn ':bintrayCredentialsCheck'
   }
 }
 
@@ -66,4 +86,68 @@ dependencies {
 jar {
   baseName packageName
   finalizedBy jacocoRootReport
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  baseName packageName
+  classifier = 'javadoc'
+  from "$buildDir/docs/javadoc"
+}
+ 
+task sourcesJar(type: Jar) {
+  baseName packageName
+  from sourceSets.main.allSource
+  classifier = 'sources'
+}
+ 
+artifacts {
+  archives jar
+  archives javadocJar
+  archives sourcesJar
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      groupId project(':').group
+      artifactId packageName
+      version project(':').version
+      from components.java
+      artifact sourcesJar
+      artifact javadocJar
+    }
+  }
+  repositories {
+    maven {
+      url "${project(':').projectDir}/../repo"
+    }
+  }
+}
+
+def packageDesc = 'Simple, elegant configuration'
+def repoName = 'yconf'
+bintray {
+  user = System.getenv(envUser)
+  key = System.getenv(envKey)
+  publications = ['mavenJava']
+  pkg {
+    repo = "yconf"
+    name = packageName
+    userOrg = 'obsidiandynamics'
+    desc = packageDesc
+    websiteUrl = "https://github.com/obsidiandynamics/yconf"
+    licenses = ['BSD New']
+    vcsUrl = "https://github.com/obsidiandynamics/yconf"
+    issueTrackerUrl = "https://github.com/obsidiandynamics/yconf/issues"
+    publicDownloadNumbers = true
+    githubRepo = "obsidiandynamics/yconf"
+    override = true
+    publish = false
+    version {
+      name = project(':').version
+      desc = packageDesc
+      released  = new Date()
+      vcsTag = project(':').version
+    }
+  }
 }
