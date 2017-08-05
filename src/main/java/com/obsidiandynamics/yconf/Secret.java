@@ -26,7 +26,7 @@ public final class Secret {
     } else if (obj instanceof Secret) {
       return ((Secret) obj).unmask();
     } else {
-      return String.valueOf(obj);
+      return obj.toString();
     }
   }
   

@@ -398,3 +398,36 @@ Most off-the-shelf parsers already have a method akin to this. So in most cases,
 Sometimes you need to massage the resulting DOM into what YConf expects. Remember, each node in the object graph needs to be either a scalar (a primitive or its boxed type), a `List<Object>` or a `Map<String, Object>`, where the `Object` element/value is either a scalar or again a `List`/`Map`.
 
 Another thing to watch out for is [number types](#user-content-number-types). See [FixDoubles.java](https://github.com/obsidiandynamics/yconf/blob/master/gson/src/main/java/com/obsidiandynamics/yconf/FixDoubles.java) for an example on how YConf's Gson plugin recursively transforms non-decimal `double`s to `int`s and `long`s in an object graph.
+
+# More on EL
+## Configuring
+By convention, all YConf plugins are configured in-line using a fluent API. The following example attaches a `JuelTransform` to a `MappingContext`, having first registered one new variable and one new function.
+
+```java
+new MappingContext()
+.withDomTransform(new JuelTransform()
+                  .withVariable("pi", Math.PI)
+                  .withFunction("math", "round", Math.class.getMethod("round", double.class)));
+```
+
+The `withVariable()` method accepts a variable value for a given name. In our example, the value of Pi can be accessed with the expression `${pi}`.
+
+The `withFunction()` method accepts a static method and, optionally, a namespace (the first argument). In our example, we can round a floating-point number with the expression `${math:round(pi)}`, resulting in the `long` `3`. Without the namespace, the expression would be just `${round(pi)}`.
+
+## Built-in variables
+### `env`
+The `env` variable is a map of all environment variables visible to the application when `JuelTransform` is instantiated. On the author's machine, calling `${env.USER}` produces the string `emil`.
+
+### `session`
+The `session` variable captures the current mapping context. At present it has a single method named `link()`, which you would have seen earlier. Calling `${session.link(filename)}` will load the contents of `filename`. The format of the linked file _must_ be compatible with the parser that is registered in `MappingContext`. In other words, you can't link a YAML file from a JSON document.
+
+## Built-in functions
+### `mandatory(Object, String)`
+Returns the value of the first argument, providing it's not `null`. Otherwise, it will throw a `com.obsidiandynamics.yconf.MissingValueException` with the message given in the second argument. This is useful for enforcing the presence of a value during application bootstrapping, particularly if the value is sourced externally (for example, from `env`).
+
+### `secret(String)`
+Wraps the value of the argument in a `com.obsidiandynamics.yconf.Secret` object. Calling `Secret.toString()` returns the hard-coded value `<masked>`. It can be used to encapsulate a configuration parameter that isn't intended for general knowledge.
+
+To unwrap the secret, simply call the static `Secret.unmask(Object)` method, passing in the secret object. The `unmask()` method is fairly flexible, and can be called with a non-`Secret`, returning the given object's `toString()` representation. It's also null-safe; if a `null` is passed in, a `null` is returned.
+
+`Secret` was invented to solve a common problem. Lot's of applications log their configured values during startup. Since logging a secret is undesirable, applications will typically skip over the secret. This works if the application has _a priori_ knowledge of which parameters are secret. But the application might not know this in advance (say, if you're building a framework). In this case, the correct thing to do is to assume that all strings are secret, and explicitly resolve them with `Secret.unmask()` prior to use. Logging the values directly (without unmasking them first) is harmless - it will just print the string `<masked>`.
