@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/wiki/obsidiandynamics/yconf/images/yconf-logo.png" alt="logo"/> YConf
+<img src="https://raw.githubusercontent.com/wiki/obsidiandynamics/yconf/images/yconf-logo.png" width="90px" alt="logo"/> YConf
 ===
 Simple, elegant configuration.
 
