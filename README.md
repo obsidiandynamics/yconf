@@ -1,8 +1,8 @@
 <img src="https://raw.githubusercontent.com/wiki/obsidiandynamics/yconf/images/yconf-logo.png" alt="logo"/> YConf
 ===
-[ ![Download](https://api.bintray.com/packages/obsidiandynamics/yconf/yconf-core/images/download.svg) ](https://bintray.com/william-hill-community/flywheel/flywheel-core/_latestVersion)
+Simple, elegant configuration.
 
-<p style="font-size: 1.5em">Simple, elegant configuration.</p>
+[ ![Download](https://api.bintray.com/packages/obsidiandynamics/yconf/yconf-core/images/download.svg) ](https://bintray.com/obsidiandynamics/yconf/yconf-core/_latestVersion)
 
 # About
 YConf is a mapping layer for a one-way conversion of structured documents (XML, JSON, YAML, etc.) into object graphs, specifically optimised for configuration scenarios. It is not a general-purpose object serialisation framework; instead, it's like an ORM for configuration artefacts.
