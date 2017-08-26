@@ -16,6 +16,10 @@ public final class RuntimeMapper implements TypeMapper {
   
   private Function<String, String> typeFormatter = Function.identity();
   
+  String getTypeAttribute() {
+    return typeAttribute;
+  }
+  
   public RuntimeMapper withTypeAttribute(String typeAttribute) {
     this.typeAttribute = typeAttribute;
     return this;

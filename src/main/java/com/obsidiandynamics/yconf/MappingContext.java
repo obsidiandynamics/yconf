@@ -14,6 +14,8 @@ public final class MappingContext {
   
   private Parser parser;
   
+  private RuntimeMapper runtimeMapper = new RuntimeMapper();;
+  
   public MappingContext() {
     withMappers(defaultMappers());
   }
@@ -25,7 +27,7 @@ public final class MappingContext {
     });
   }
   
-  private static Map<Class<?>, TypeMapper> defaultMappers() {
+  private Map<Class<?>, TypeMapper> defaultMappers() {
     final Map<Class<?>, TypeMapper> mappers = new HashMap<>();
     mappers.put(boolean.class, new CoercingMapper(Boolean.class, Boolean::parseBoolean));
     mappers.put(Boolean.class, new CoercingMapper(Boolean.class, Boolean::parseBoolean));
@@ -42,7 +44,7 @@ public final class MappingContext {
     mappers.put(Integer.class, new CoercingMapper(Integer.class, stripTrailingDecimalFunc().then(Integer::parseInt)));
     mappers.put(long.class, new CoercingMapper(Long.class, stripTrailingDecimalFunc().then(Long::parseLong)));
     mappers.put(Long.class, new CoercingMapper(Long.class, stripTrailingDecimalFunc().then(Long::parseLong)));
-    mappers.put(Object.class, new RuntimeMapper());
+    mappers.put(Object.class, (y, type) -> runtimeMapper.map(y, type));
     mappers.put(short.class, new CoercingMapper(Short.class, stripTrailingDecimalFunc().then(Short::parseShort)));
     mappers.put(Short.class, new CoercingMapper(Short.class, stripTrailingDecimalFunc().then(Short::parseShort)));
     mappers.put(String.class, new CoercingMapper(String.class, s -> s));
@@ -85,6 +87,15 @@ public final class MappingContext {
   
   Object transformDom(Object dom) {
     return domTransform.transform(dom, this);
+  }
+  
+  RuntimeMapper getRuntimeMapper() {
+    return runtimeMapper;
+  }
+  
+  public MappingContext withRuntimeMapper(RuntimeMapper runtimeMapper) {
+    this.runtimeMapper = runtimeMapper;
+    return this;
   }
   
   public MappingContext withParser(Parser parser) {

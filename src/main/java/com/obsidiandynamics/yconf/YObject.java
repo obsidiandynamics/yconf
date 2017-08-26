@@ -49,7 +49,9 @@ public final class YObject {
     final Map<?, ?> items = (Map<?, ?>) dom;
     final Map<String, YObject> map = new LinkedHashMap<>(items.size());
     for (Map.Entry<?, ?> i : items.entrySet()) {
-      map.put((String) i.getKey(), new YObject(i.getValue(), context));
+      final String key = (String) i.getKey();
+      if (key.equals(context.getRuntimeMapper().getTypeAttribute())) continue;
+      map.put(key, new YObject(i.getValue(), context));
     }
     return map;
   }
