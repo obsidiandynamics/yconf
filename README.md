@@ -227,7 +227,7 @@ The `animals` field can be an `Object[]` or an `Animal[]` (assuming `Dog` and `B
 
 ```java
 new MappingContext()
-.withMapper(Object.class, new RuntimeMapper().withTypeAttribute("anotherAttribute"))
+.withRuntimeMapper(new RuntimeMapper().withTypeAttribute("anotherAttribute"))
 .fromStream(...);
 ```
 
@@ -235,7 +235,7 @@ If all your types come from the same base package, you can do one better. The `R
 
 ```java
 new MappingContext()
-.withMapper(Object.class, new RuntimeMapper().withTypeAttribute("_type").withTypeFormatter("com.acme."::concat))
+.withRuntimeMapper(new RuntimeMapper().withTypeAttribute("_type").withTypeFormatter("com.acme."::concat))
 .fromStream(...);
 ```
 
