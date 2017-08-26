@@ -46,13 +46,13 @@ public final class RuntimeMapperTest {
   
   @Test
   public void testMap() {
-    final Map<String, String> map = new LinkedHashMap<>();
-    map.put("type", RuntimeTestClass.class.getName());
-    map.put("a", "A");
-    map.put("b", "B");
-    map.put("c", "C");
+    final Map<String, String> dom = new LinkedHashMap<>();
+    dom.put("type", RuntimeTestClass.class.getName());
+    dom.put("a", "A");
+    dom.put("b", "B");
+    dom.put("c", "C");
     final Object obj = new MappingContext()
-        .map(map, Object.class);
+        .map(dom, Object.class);
     assertNotNull(obj);
     assertEquals(RuntimeTestClass.class, obj.getClass());
     final RuntimeTestClass r = (RuntimeTestClass) obj;
