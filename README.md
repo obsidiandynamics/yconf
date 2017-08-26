@@ -83,9 +83,9 @@ You need to add `yconf-core` and at least one other module, depending on the des
 
 We're going to stick to YAML for our examples. Our sample Gradle dependencies resemble the following:
 ```groovy
-compile 'com.obsidiandynamics.yconf:yconf-core:0.1.0'
-compile 'com.obsidiandynamics.yconf:yconf-juel:0.1.0'
-compile 'com.obsidiandynamics.yconf:yconf-snakeyaml:0.1.0'
+compile 'com.obsidiandynamics.yconf:yconf-core:0.2.0'
+compile 'com.obsidiandynamics.yconf:yconf-juel:0.2.0'
+compile 'com.obsidiandynamics.yconf:yconf-snakeyaml:0.2.0'
 ```
 
 ## Field injection
