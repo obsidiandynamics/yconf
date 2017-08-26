@@ -1,0 +1,8 @@
+a:
+  type: com.obsidiandynamics.yconf.MapConf
+  aa: AA
+  ab: AB
+b:
+  type: com.obsidiandynamics.yconf.MapConf
+  ba: BA
+  bb: BB
