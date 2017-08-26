@@ -3,7 +3,7 @@ package com.obsidiandynamics.yconf;
 import java.io.*;
 
 public final class JuelSession {
-  final ThreadLocal<MappingContext> localContext = new ThreadLocal<>();
+  private final ThreadLocal<MappingContext> localContext = new ThreadLocal<>();
   
   boolean setLocalContext(MappingContext context) {
     final boolean assigned = localContext.get() == null;
