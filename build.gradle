@@ -131,16 +131,16 @@ bintray {
   key = System.getenv(envKey)
   publications = ['mavenJava']
   pkg {
-    repo = "yconf"
+    repo = "${repoName}"
     name = packageName
     userOrg = 'obsidiandynamics'
     desc = packageDesc
-    websiteUrl = "https://github.com/obsidiandynamics/yconf"
+    websiteUrl = "https://github.com/obsidiandynamics/${repoName}"
     licenses = ['BSD New']
-    vcsUrl = "https://github.com/obsidiandynamics/yconf"
-    issueTrackerUrl = "https://github.com/obsidiandynamics/yconf/issues"
+    vcsUrl = "https://github.com/obsidiandynamics/${repoName}"
+    issueTrackerUrl = "https://github.com/obsidiandynamics/${repoName}/issues"
     publicDownloadNumbers = true
-    githubRepo = "obsidiandynamics/yconf"
+    githubRepo = "obsidiandynamics/${repoName}"
     override = true
     publish = false
     version {
