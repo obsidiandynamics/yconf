@@ -1,4 +1,5 @@
 def packageName = 'yconf-snakeyaml'
+version = project(':').version
 
 dependencies {
   compile project(':')

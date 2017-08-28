@@ -1,4 +1,5 @@
 def packageName = 'yconf-gson'
+version = project(':').version
 
 dependencies {
   compile project(':')

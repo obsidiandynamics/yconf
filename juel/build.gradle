@@ -1,4 +1,5 @@
 def packageName = 'yconf-juel'
+version = project(':').version
 
 dependencies {
   compile project(':')
