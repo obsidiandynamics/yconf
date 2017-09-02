@@ -7,6 +7,9 @@ import java.util.*;
 
 import org.junit.Test;
 
+import com.obsidiandynamics.yconf.MappingContext.*;
+import com.obsidiandynamics.yconf.RuntimeMapper.*;
+
 import junit.framework.*;
 
 public final class BasicMappingTest {
@@ -21,7 +24,7 @@ public final class BasicMappingTest {
     assertEquals(Collections.singletonMap("a", "b"), obj);
   }
 
-  @Test(expected=MappingException.class)
+  @Test(expected=NoSuchClassException.class)
   public void testExplicitTypeNotFound() throws IOException {
     new MappingContext()
     .map(Collections.singletonMap("type", "java.Foo"), Object.class);
@@ -32,7 +35,7 @@ public final class BasicMappingTest {
     static abstract class Mapper implements TypeMapper {}
   }
 
-  @Test(expected=MappingException.class)
+  @Test(expected=MapperInstantiationException.class)
   public void testUninstantiableMapper() throws IOException {
     new MappingContext()
     .map(Collections.singletonMap("type", TestType.class.getName()), Object.class);

@@ -97,6 +97,11 @@ public final class YObject {
     return new YConditional(getAttribute(att));
   }
   
+  static final class FieldAssignmentException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    FieldAssignmentException(String m, Exception cause) { super(m, cause); }
+  }
+  
   /**
    *  Reflectively maps this DOM to the fields of the given target object, assigning
    *  all declared fields across the entire class hierarchy that have been annotated
@@ -125,7 +130,7 @@ public final class YObject {
             try {
               field.set(target, value);
             } catch (IllegalArgumentException | IllegalAccessException e) {
-              throw new MappingException("Unable to assign to field " + field.getName() + " of class " + cls, e);
+              throw new FieldAssignmentException("Unable to assign to field " + field.getName() + " of class " + cls, e);
             }
           }
         }

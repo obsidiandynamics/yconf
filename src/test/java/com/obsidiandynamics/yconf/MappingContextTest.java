@@ -4,10 +4,12 @@ import java.io.*;
 
 import org.junit.Test;
 
+import com.obsidiandynamics.yconf.MappingContext.*;
+
 import junit.framework.*;
 
 public final class MappingContextTest {
-  @Test(expected=MappingException.class)
+  @Test(expected=NoParserException.class)
   public void testNoParser() throws IOException {
     new MappingContext().fromString("").map(Object.class);
   }

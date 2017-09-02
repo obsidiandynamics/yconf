@@ -68,8 +68,8 @@ oversold: ${1 - env.STO_OVERBOUGHT}
 Gradle builds are hosted on JCenter. Just add the following snippet to your build file (replacing the version number in the snippet with the version shown on the Download badge at the top of this README).
 
 ```groovy
-compile 'com.obsidiandynamics.yconf:yconf-core:0.2.0'
-compile 'com.obsidiandynamics.yconf:<module>:0.2.0'
+compile 'com.obsidiandynamics.yconf:yconf-core:0.2.1'
+compile 'com.obsidiandynamics.yconf:<module>:0.2.1'
 ```
 
 You need to add `yconf-core` and at least one other module, depending on the desired parser. The following is a list of available modules on JCenter.

@@ -8,13 +8,28 @@ import java.util.*;
  *  class, in addition to setting fields directly post construction.
  */
 public final class ReflectiveMapper implements TypeMapper {
+  static final class ObjectInstantiationException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    ObjectInstantiationException(String m, Throwable cause) { super(m, cause); }
+  }
+  
+  static final class NoSuitableConstructorException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    NoSuitableConstructorException(String m, Throwable cause) { super(m, cause); }
+  }
+
+  static final class NoNameSpecifiedException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    NoNameSpecifiedException(String m) { super(m); }
+  }
+  
   @Override
   public Object map(YObject y, Class<?> type) {
     final Constructor<?> constr;
     try {
       constr = getConstructor(type);
     } catch (NoSuchMethodException | SecurityException e) {
-      throw new MappingException("Class " + type.getName() + " does not have a suitable constructor", e);
+      throw new NoSuitableConstructorException("Class " + type.getName() + " does not have a suitable constructor", e);
     }
     
     final Object[] args = new Object[constr.getParameterCount()];
@@ -22,7 +37,9 @@ public final class ReflectiveMapper implements TypeMapper {
     for (int i = 0; i < params.length; i++) {
       final YInject inj = params[i].getAnnotation(YInject.class);
       final Class<?> t = inj.type() != Void.class ? inj.type() : params[i].getType();
-      if (inj.name().isEmpty()) throw new MappingException("No name specified for attribute of type " + t.getName(), null);
+      if (inj.name().isEmpty()) {
+        throw new NoNameSpecifiedException("No name specified for attribute of type " + t.getName());
+      }
       args[i] = y.getAttribute(inj.name()).map(t);
     }
 
@@ -30,7 +47,7 @@ public final class ReflectiveMapper implements TypeMapper {
     try {
       target = constr.newInstance(args);
     } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-      throw new MappingException("Error instantiating " + type.getName(), e);
+      throw new ObjectInstantiationException("Error instantiating " + type.getName(), e);
     }
     
     return y.mapReflectively(target);

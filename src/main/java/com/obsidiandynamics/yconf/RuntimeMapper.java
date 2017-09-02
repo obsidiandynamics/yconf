@@ -12,6 +12,11 @@ import java.util.function.*;
  *  {@link #withTypeAttribute(String)}.
  */
 public final class RuntimeMapper implements TypeMapper {
+  static final class NoMapperException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    NoMapperException(String m) { super(m); }
+  }
+  
   private String typeAttribute = "type";
   
   private Function<String, String> typeFormatter = Function.identity();
@@ -28,6 +33,11 @@ public final class RuntimeMapper implements TypeMapper {
   public RuntimeMapper withTypeFormatter(Function<String, String> typeFormatter) {
     this.typeFormatter = typeFormatter;
     return this;
+  }
+  
+  static final class NoSuchClassException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    NoSuchClassException(String m, ClassNotFoundException cause) { super(m, cause); }
   }
   
   @Override
@@ -51,9 +61,13 @@ public final class RuntimeMapper implements TypeMapper {
       try {
         concreteType = Class.forName(typeVal);
       } catch (ClassNotFoundException e) {
-        throw new MappingException("Error loading class", e);
+        throw new NoSuchClassException("Error loading class", e);
       }
   
+      if (concreteType == type) {
+        throw new NoMapperException("No mapper for " + concreteType.getName());
+      }
+      
       return y.map(concreteType);
     } else {
       return y.value();

@@ -15,12 +15,17 @@ public final class JuelSession {
     localContext.remove();
   }
   
+  static final class LinkingException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    LinkingException(String m, Exception cause) { super(m, cause); }
+  }
+  
   public Object link(String file) {
     try (Reader reader = new FileReader(file)) {
       final YObject y = localContext.get().fromReader(reader);
       return y.value();
     } catch (IOException e) {
-      throw new MappingException("Error reading from " + file, e);
+      throw new LinkingException("Error reading from " + file, e);
     }
   }
 }

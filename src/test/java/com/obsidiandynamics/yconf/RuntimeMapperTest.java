@@ -6,6 +6,8 @@ import java.util.*;
 
 import org.junit.*;
 
+import com.obsidiandynamics.yconf.RuntimeMapper.*;
+
 public final class RuntimeMapperTest {
   @Y(RuntimeTestClass.Mapper.class)
   public static final class RuntimeTestClass {
@@ -57,5 +59,15 @@ public final class RuntimeMapperTest {
     assertEquals(RuntimeTestClass.class, obj.getClass());
     final RuntimeTestClass r = (RuntimeTestClass) obj;
     assertEquals(3, r.map.size());
+  }  
+  
+  public interface RuntimeMapped {}
+  
+  public static final class Unmapped implements RuntimeMapped {}
+  
+  @Test(expected=NoMapperException.class)
+  public void testUnmapped() {
+    new MappingContext()
+    .map(Collections.singletonMap("type", Unmapped.class.getName()), RuntimeMapped.class);
   }
 }

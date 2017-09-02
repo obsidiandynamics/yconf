@@ -9,24 +9,28 @@ import com.obsidiandynamics.yconf.CoercingMapper.*;
 
 public final class MappingContext {
   private final Map<Class<?>, TypeMapper> mappers = new HashMap<>();
-  
+
   private DomTransform domTransform = (dom, context) -> dom;
-  
+
   private Parser parser;
-  
+
   private RuntimeMapper runtimeMapper = new RuntimeMapper();;
-  
+
   public MappingContext() {
     withMappers(defaultMappers());
   }
-  
+
   private static TypeMapper getCharMapper() {
     return new CoercingMapper(Character.class, s -> {
-      if (s.length() != 1) throw new MappingException("Invalid character '" + s + "'", null);
+      if (s.length() != 1) {
+        throw new MappingException("Invalid character '" + s + "'", null) {
+          private static final long serialVersionUID = 1L;
+        };
+      }
       return s.charAt(0);
     });
   }
-  
+
   private Map<Class<?>, TypeMapper> defaultMappers() {
     final Map<Class<?>, TypeMapper> mappers = new HashMap<>();
     mappers.put(boolean.class, new CoercingMapper(Boolean.class, Boolean::parseBoolean));
@@ -54,20 +58,20 @@ public final class MappingContext {
     mappers.put(URL.class, new CoercingMapper(URL.class, URL::new));
     return mappers;
   }
-  
+
   @FunctionalInterface
   private interface StringProcessor {
     String process(String source);
-    
+
     default <T> StringConverter<T> then(StringConverter<T> converter) {
       return str -> converter.convert(process(str));
     }
   }
-  
+
   private static StringProcessor stripTrailingDecimalFunc() {
     return MappingContext::stripTrailingDecimal;
   }
-  
+
   private static String stripTrailingDecimal(String str) {
     if (str.endsWith(".0")) {
       return str.substring(0, str.length() - 2);
@@ -75,7 +79,7 @@ public final class MappingContext {
       return str;
     }
   }
-  
+
   private TypeMapper getMapper(Class<?> type) {
     final TypeMapper existing = mappers.get(type);
     if (existing != null) {
@@ -86,64 +90,69 @@ public final class MappingContext {
       return newMapper;
     }
   }
-  
+
   Object transformDom(Object dom) {
     return domTransform.transform(dom, this);
   }
-  
+
   RuntimeMapper getRuntimeMapper() {
     return runtimeMapper;
   }
-  
+
   public MappingContext withRuntimeMapper(RuntimeMapper runtimeMapper) {
     this.runtimeMapper = runtimeMapper;
     return this;
   }
-  
+
   public MappingContext withParser(Parser parser) {
     this.parser = parser;
     return this;
   }
-  
+
   public MappingContext withDomTransform(DomTransform domTransform) {
     this.domTransform = domTransform;
     return this;
   }
-  
+
   public MappingContext withMapper(Class<?> type, TypeMapper mapper) {
     mappers.put(type, mapper);
     return this;
   }
-  
+
   public MappingContext withMappers(Map<Class<?>, TypeMapper> mappers) {
     this.mappers.putAll(mappers);
     return this;
   }
-  
+
   @SuppressWarnings("unchecked")
   static <T> T cast(Object obj) {
     return (T) obj;
   }
-  
+
+  static final class MapperInstantiationException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    MapperInstantiationException(String m, Exception cause) { super(m, cause); }
+  }
+
   private TypeMapper instantiateMapper(Class<?> type) {
     final Y y = type.getAnnotation(Y.class);
     if (y != null) {
       try {
         return cast(y.value().newInstance());
       } catch (Exception e) {
-        throw new MappingException("Error instantiating mapper " + y.value().getName() + " for type " +
+        throw new MapperInstantiationException("Error instantiating mapper " + y.value().getName() + " for type " +
             type.getName(), e);
       }
     } else {
       return mappers.get(Object.class);
     }
   }
-  
+
   <T> T map(Object dom, Class<? extends T> type) {
     if (dom instanceof YObject) throw new IllegalArgumentException("Cannot map an instance of " + YObject.class.getSimpleName());
 
     if (dom == null) return null;
-    
+
     if (type.isArray()) {
       final Class<?> componentType = type.getComponentType();
       final List<?> items = (List<?>) dom;
@@ -159,23 +168,28 @@ public final class MappingContext {
       return cast(mapper.map(y, type));
     }
   }
-  
-  private void ensureParser() {
-    if (parser == null) throw new MappingException("Parser not assigned");
+
+  static final class NoParserException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    NoParserException(String m) { super(m); }
   }
-  
+
+  private void ensureParser() {
+    if (parser == null) throw new NoParserException("Parser not assigned");
+  }
+
   public YObject fromStream(InputStream stream) throws IOException {
     ensureParser();
     final Object root = parser.load(new InputStreamReader(stream));
     return new YObject(root, this);
   }
-  
+
   public YObject fromReader(Reader reader) throws IOException {
     ensureParser();
     final Object root = parser.load(reader);
     return new YObject(root, this);
   }
-  
+
   public YObject fromString(String str) throws IOException {
     ensureParser();
     final Object root = parser.load(new StringReader(str));

@@ -10,6 +10,8 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 import org.junit.runners.Parameterized.*;
 
+import com.obsidiandynamics.yconf.ReflectiveMapper.*;
+
 @RunWith(Parameterized.class)
 public final class ReflectiveTest {
   public static abstract class Super {
@@ -202,7 +204,7 @@ public final class ReflectiveTest {
     AnnotatedConstructorNoName(@YInject int num) {}
   }
 
-  @Test(expected=MappingException.class)
+  @Test(expected=NoNameSpecifiedException.class)
   public void testAnnotatedConstructorNoName() throws IOException {
     new MappingContext()
     .withParser(parser)
@@ -215,7 +217,7 @@ public final class ReflectiveTest {
     AnnotatedConstructorNoDefaultConstructor(int num) {}
   }
 
-  @Test(expected=MappingException.class)
+  @Test(expected=NoSuitableConstructorException.class)
   public void testAnnotatedConstructorNoDefaultConstructor() throws IOException {
     new MappingContext()
     .withParser(parser)
@@ -228,7 +230,7 @@ public final class ReflectiveTest {
     AnnotatedConstructorPartial(@YInject(name="number") int num, String str) {}
   }
 
-  @Test(expected=MappingException.class)
+  @Test(expected=NoSuitableConstructorException.class)
   public void testAnnotatedConstructorPartial() throws IOException {
     new MappingContext()
     .withParser(parser)
@@ -241,7 +243,7 @@ public final class ReflectiveTest {
     private AnnotatedConstructorPrivate() {}
   }
 
-  @Test(expected=MappingException.class)
+  @Test(expected=NoSuitableConstructorException.class)
   public void testAnnotatedConstructorPrivate() throws IOException {
     new MappingContext()
     .withParser(parser)
@@ -254,7 +256,7 @@ public final class ReflectiveTest {
     AnnotatedConstructorIllegalArg(@YInject(name="number", type=int.class) char num) {}
   }
 
-  @Test(expected=MappingException.class)
+  @Test(expected=ObjectInstantiationException.class)
   public void testAnnotatedConstructorIllegalArg() throws IOException {
     new MappingContext()
     .withParser(parser)

@@ -24,7 +24,12 @@ public final class CoercingMapper implements TypeMapper {
     this.coercedType = coercedType;
     this.converter = converter;
   }
-
+  
+  static final class CoercionException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    CoercionException(String m, Throwable cause) { super(m, cause); }
+  }
+  
   @Override
   public Object map(YObject y, Class<?> type) {
     if (y.is(coercedType)) {
@@ -34,7 +39,7 @@ public final class CoercingMapper implements TypeMapper {
       try {
         return converter.convert(str);
       } catch (Throwable e) {
-        throw new MappingException(null, e);
+        throw new CoercionException(null, e);
       }
     }
   }

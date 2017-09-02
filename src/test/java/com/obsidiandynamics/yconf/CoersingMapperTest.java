@@ -6,6 +6,8 @@ import java.net.*;
 
 import org.junit.*;
 
+import com.obsidiandynamics.yconf.CoercingMapper.*;
+
 public final class CoersingMapperTest {
   @Test
   public void testBoolean() {
@@ -26,7 +28,7 @@ public final class CoersingMapperTest {
     test("b", Character.class, 'b');
   }
   
-  @Test(expected=MappingException.class)
+  @Test(expected=CoercionException.class)
   public void testInvalidCharacter() {
     test("abc", Character.class, null);
   }

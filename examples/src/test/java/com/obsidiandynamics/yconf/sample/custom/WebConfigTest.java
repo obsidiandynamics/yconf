@@ -8,6 +8,7 @@ import java.net.*;
 import org.junit.*;
 
 import com.obsidiandynamics.yconf.*;
+import com.obsidiandynamics.yconf.sample.custom.WebConfig.*;
 
 public final class WebConfigTest {
   private static WebConfig load(String filename) throws IOException {
@@ -26,12 +27,12 @@ public final class WebConfigTest {
     assertEquals(new URI("https://sd.acme.com"), conf.servers.get("Service discovery"));
   }
 
-  @Test(expected=MappingException.class)
+  @Test(expected=WebConfigException.class)
   public void testDuplicate() throws IOException, URISyntaxException {
     load("sample-custom-duplicate.yaml");
   }
   
-  @Test(expected=MappingException.class)
+  @Test(expected=WebConfigException.class)
   public void testBadUri() throws IOException, URISyntaxException {
     load("sample-custom-bad-uri.yaml");
   }

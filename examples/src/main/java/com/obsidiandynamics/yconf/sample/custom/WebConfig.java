@@ -13,7 +13,7 @@ public final class WebConfig {
       for (YObject server : y.asList()) {
         final String name = server.mapAttribute("name", String.class);
         if (servers.containsKey(name)) {
-          throw new MappingException("Duplicate server name " + name);
+          throw new WebConfigException("Duplicate server name " + name, null);
         }
         
         final String protocol = server.mapAttribute("protocol", String.class);
@@ -24,12 +24,17 @@ public final class WebConfig {
         try {
           uri = new URI(protocol, null, host, port != null ? port : -1, path, null, null);
         } catch (URISyntaxException e) {
-          throw new MappingException("Error parsing URI", e);
+          throw new WebConfigException("Error parsing URI", e);
         }
         servers.put(name, uri);
       }
       return new WebConfig(servers);
     }
+  }
+  
+  static final class WebConfigException extends MappingException {
+    private static final long serialVersionUID = 1L;
+    WebConfigException(String m, Exception cause) { super(m, cause); }
   }
   
   final Map<String, URI> servers;
