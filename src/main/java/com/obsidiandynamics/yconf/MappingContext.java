@@ -138,7 +138,7 @@ public final class MappingContext {
     final Y y = type.getAnnotation(Y.class);
     if (y != null) {
       try {
-        return cast(y.value().newInstance());
+        return cast(y.value().getDeclaredConstructor().newInstance());
       } catch (Exception e) {
         throw new MapperInstantiationException("Error instantiating mapper " + y.value().getName() + " for type " +
             type.getName(), e);
