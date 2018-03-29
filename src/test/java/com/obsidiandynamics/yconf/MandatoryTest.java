@@ -7,13 +7,13 @@ import java.util.*;
 
 import org.junit.*;
 
-import com.obsidiandynamics.indigo.util.*;
+import com.obsidiandynamics.assertion.*;
 import com.obsidiandynamics.yconf.Mandatory.*;
 
 public final class MandatoryTest {
   @Test
   public void testConformance() throws Exception {
-    TestSupport.assertUtilityClassWellDefined(Mandatory.class);
+    Assertions.assertUtilityClassWellDefined(Mandatory.class);
   }
   
   @Test

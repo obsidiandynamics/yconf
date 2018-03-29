@@ -7,12 +7,12 @@ import java.util.*;
 
 import org.junit.*;
 
-import com.obsidiandynamics.indigo.util.*;
+import com.obsidiandynamics.assertion.*;
 
 public final class FixDoublesTest {
   @Test
   public void testConformance() throws Exception {
-    TestSupport.assertUtilityClassWellDefined(FixDoubles.class);
+    Assertions.assertUtilityClassWellDefined(FixDoubles.class);
   }
   
   @Test

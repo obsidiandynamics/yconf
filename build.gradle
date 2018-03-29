@@ -30,8 +30,13 @@ allprojects {
     jcenter()
   }
   
+  ext {
+    fulcrumVersion = "0.4.0"
+  }
+  
   dependencies {
-    testCompile "com.obsidiandynamics.indigo:indigo-assurance:0.9.4"
+    testCompile "com.obsidiandynamics.fulcrum:fulcrum-assert:${fulcrumVersion}"
+    testCompile 'junit:junit:4.12'
   }
 
   jacoco {
