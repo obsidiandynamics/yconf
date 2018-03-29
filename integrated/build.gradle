@@ -1,9 +1,9 @@
-def packageName = 'yconf-integrated'
+def packageName = "yconf-integrated"
 
 dependencies {
-  testCompile project(':yconf-gson')
-  testCompile project(':yconf-snakeyaml')
-  testCompile project(':yconf-juel')
+  testCompile project(":yconf-gson")
+  testCompile project(":yconf-snakeyaml")
+  testCompile project(":yconf-juel")
 }
 
 jar {

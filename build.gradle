@@ -1,41 +1,41 @@
 plugins {
-  id 'com.jfrog.bintray' version '1.7.3'
+  id "com.jfrog.bintray" version "1.7.3"
 }
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: "maven-publish"
+apply plugin: "com.jfrog.bintray"
 
-group = 'com.obsidiandynamics.yconf'
-version = '0.2.1'
+group = "com.obsidiandynamics.yconf"
+version = "0.2.1"
   
-def envUser = 'BINTRAY_USER'
-def envKey = 'BINTRAY_KEY'
+def envUser = "BINTRAY_USER"
+def envKey = "BINTRAY_KEY"
 task bintrayCredentialsCheck {
   doLast {
     if (System.getenv(envUser) == null) {
-      throw new GradleException("No Bintray username specified; set with 'export ${envUser}=<username>'")
+      throw new GradleException('No Bintray username specified; set with "export ${envUser}=<username>"')
     }
     if (System.getenv(envKey) == null) {
-      throw new GradleException("No Bintray key specified; set with 'export ${envKey}=<key>'")
+      throw new GradleException('No Bintray key specified; set with "export ${envKey}=<key>"')
     }
   }
 }
 
 allprojects {
-  apply plugin: 'java'
-  apply plugin: 'jacoco'
-  apply plugin: 'maven-publish'
-  apply plugin: 'com.jfrog.bintray'
+  apply plugin: "java"
+  apply plugin: "jacoco"
+  apply plugin: "maven-publish"
+  apply plugin: "com.jfrog.bintray"
 
   repositories {
     jcenter()
   }
   
   dependencies {
-    testCompile 'com.obsidiandynamics.indigo:indigo-assurance:0.9.4'
+    testCompile "com.obsidiandynamics.indigo:indigo-assurance:0.9.4"
   }
 
   jacoco {
-    toolVersion = '0.7.9'
+    toolVersion = "0.7.9"
   }
 
   jacocoTestReport {
@@ -43,15 +43,15 @@ allprojects {
     sourceDirectories = files(sourceSets.main.allSource.srcDirs)
     classDirectories = files(sourceSets.main.output)
     reports {
-      html.enabled = true
-      xml.enabled = true
-      csv.enabled = false
+      html.enabled true
+      xml.enabled true
+      csv.enabled false
     }
   }
 
   // invoke this task when ready to publish to Bintray
   bintrayUpload {
-    dependsOn ':bintrayCredentialsCheck'
+    dependsOn ":bintrayCredentialsCheck"
   }
 }
 
@@ -64,9 +64,9 @@ task jacocoRootReport(type: JacocoReport) {
   classDirectories = files(allprojects.sourceSets.main.output)
   executionData = files(allprojects.jacocoTestReport.executionData)
   reports {
-    html.enabled = true
-    xml.enabled = false
-    csv.enabled = false
+    html.enabled true
+    xml.enabled true
+    csv.enabled false
   }
   onlyIf = {
     true
@@ -78,7 +78,7 @@ task jacocoRootReport(type: JacocoReport) {
   }
 }
 
-def packageName = 'yconf-core'
+def packageName = "yconf-core"
 
 dependencies {
 }
@@ -90,14 +90,14 @@ jar {
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
   baseName packageName
-  classifier = 'javadoc'
+  classifier = "javadoc"
   from "$buildDir/docs/javadoc"
 }
  
 task sourcesJar(type: Jar) {
   baseName packageName
   from sourceSets.main.allSource
-  classifier = 'sources'
+  classifier = "sources"
 }
  
 artifacts {
@@ -109,9 +109,9 @@ artifacts {
 publishing {
   publications {
     mavenJava(MavenPublication) {
-      groupId project(':').group
+      groupId project(":").group
       artifactId packageName
-      version project(':').version
+      version project(":").version
       from components.java
       artifact sourcesJar
       artifact javadocJar
@@ -124,19 +124,19 @@ publishing {
   }
 }
 
-def packageDesc = 'Simple, elegant configuration'
-def repoName = 'yconf'
+def packageDesc = "Simple, elegant configuration"
+def repoName = "yconf"
 bintray {
   user = System.getenv(envUser)
   key = System.getenv(envKey)
-  publications = ['mavenJava']
+  publications = ["mavenJava"]
   pkg {
     repo = "${repoName}"
     name = packageName
-    userOrg = 'obsidiandynamics'
+    userOrg = "obsidiandynamics"
     desc = packageDesc
     websiteUrl = "https://github.com/obsidiandynamics/${repoName}"
-    licenses = ['BSD New']
+    licenses = ["BSD New"]
     vcsUrl = "https://github.com/obsidiandynamics/${repoName}"
     issueTrackerUrl = "https://github.com/obsidiandynamics/${repoName}/issues"
     publicDownloadNumbers = true
@@ -144,10 +144,10 @@ bintray {
     override = true
     publish = false
     version {
-      name = project(':').version
+      name = project(":").version
       desc = packageDesc
       released  = new Date()
-      vcsTag = project(':').version
+      vcsTag = project(":").version
     }
   }
 }

@@ -1,16 +1,16 @@
-rootProject.name = 'yconf'
+rootProject.name = "yconf"
 
-include 'yconf-snakeyaml'
-project(':yconf-snakeyaml').projectDir = new File(settingsDir, 'snakeyaml')
+include "yconf-snakeyaml"
+project(":yconf-snakeyaml").projectDir = new File(settingsDir, "snakeyaml")
 
-include 'yconf-examples'
-project(':yconf-examples').projectDir = new File(settingsDir, 'examples')
+include "yconf-examples"
+project(":yconf-examples").projectDir = new File(settingsDir, "examples")
 
-include 'yconf-gson'
-project(':yconf-gson').projectDir = new File(settingsDir, 'gson')
+include "yconf-gson"
+project(":yconf-gson").projectDir = new File(settingsDir, "gson")
 
-include 'yconf-integrated'
-project(':yconf-integrated').projectDir = new File(settingsDir, 'integrated')
+include "yconf-integrated"
+project(":yconf-integrated").projectDir = new File(settingsDir, "integrated")
 
-include 'yconf-juel'
-project(':yconf-juel').projectDir = new File(settingsDir, 'juel')
+include "yconf-juel"
+project(":yconf-juel").projectDir = new File(settingsDir, "juel")
