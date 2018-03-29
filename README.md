@@ -3,6 +3,8 @@
 Simple, elegant configuration.
 
 [ ![Download](https://api.bintray.com/packages/obsidiandynamics/yconf/yconf-core/images/download.svg) ](https://bintray.com/obsidiandynamics/yconf/yconf-core/_latestVersion)
+[ ![Build](https://travis-ci.org/obsidiandynamics/yconf.svg?branch=master) ](https://travis-ci.org/obsidiandynamics/yconf#)
+[![codecov](https://codecov.io/gh/obsidiandynamics/yconf/branch/master/graph/badge.svg)](https://codecov.io/gh/obsidiandynamics/yconf)
 
 # About
 YConf is a mapping layer for a one-way conversion of structured documents (XML, JSON, YAML, etc.) into object graphs, specifically optimised for configuration scenarios. It is not a general-purpose object serialisation framework; instead, it's like an ORM for configuration artefacts.
@@ -65,11 +67,11 @@ oversold: ${1 - env.STO_OVERBOUGHT}
 
 # Getting Started
 ## Getting YConf
-Gradle builds are hosted on JCenter. Just add the following snippet to your build file (replacing the version number in the snippet with the version shown on the Download badge at the top of this README).
+Gradle builds are hosted on JCenter. Just add the following snippet to your build file. Replace the version placeholder `x.y.z` in the snippet with the version shown on the Download badge at the top of this README.
 
 ```groovy
-compile 'com.obsidiandynamics.yconf:yconf-core:0.2.1'
-compile 'com.obsidiandynamics.yconf:<module>:0.2.1'
+compile 'com.obsidiandynamics.yconf:yconf-core:x.y.z'
+compile 'com.obsidiandynamics.yconf:<module>:x.y.z'
 ```
 
 You need to add `yconf-core` and at least one other module, depending on the desired parser. The following is a list of available modules on JCenter.
