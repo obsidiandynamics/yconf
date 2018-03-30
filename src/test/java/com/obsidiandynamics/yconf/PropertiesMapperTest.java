@@ -8,9 +8,6 @@ import java.util.*;
 import org.junit.*;
 
 public final class PropertiesMapperTest {
-  @Y
-  public static final class MapMapperTestClass {}
-
   @Test
   public void test() throws IOException {
     final Map<String, Object> dom = new HashMap<>();
