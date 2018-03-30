@@ -8,5 +8,6 @@
     "a": "foo", 
     "b": "bar"
   },
-  "cls": "java.lang.String"
+  "cls": "java.lang.String",
+  "en": "CHARLIE"
 }

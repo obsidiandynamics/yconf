@@ -14,6 +14,10 @@ import com.obsidiandynamics.yconf.ReflectiveMapper.*;
 
 @RunWith(Parameterized.class)
 public final class ReflectiveTest {
+  private enum TestEnum {
+    ALPHA, BRAVO, CHARLIE, DELTA
+  }
+  
   public static abstract class Super {
     @YInject(name="byte", type=byte.class)
     protected byte b;
@@ -41,6 +45,9 @@ public final class ReflectiveTest {
     
     @YInject
     Class<?> cls;
+    
+    @YInject
+    TestEnum en;
   }
   
   @Y(CustomConstruction.Mapper.class)
@@ -84,6 +91,7 @@ public final class ReflectiveTest {
     assertEquals(45.67, m.dub, 0.0001);
     assertEquals(-128, m.b);
     assertEquals(Arrays.asList(1, 2, 3), m.list);
+    assertEquals(TestEnum.CHARLIE, m.en);
     
     final Map<String, String> map = new LinkedHashMap<>();
     map.put("a", "foo");

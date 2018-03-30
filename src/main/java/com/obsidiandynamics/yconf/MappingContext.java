@@ -163,6 +163,8 @@ public final class MappingContext {
       }
       final Object[] array = MappingContext.cast(Array.newInstance(componentType, list.size()));
       return cast(list.toArray(array));
+    } else if (type.isEnum()) {
+      return cast(Enum.valueOf(cast(type), String.valueOf(dom)));
     } else {
       final TypeMapper mapper = getMapper(type);
       final YObject y = new YObject(dom, this);
