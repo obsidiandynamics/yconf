@@ -81,14 +81,33 @@ public final class MappingContext {
     }
   }
 
-  private TypeMapper getMapper(Class<?> type) {
+  private TypeMapper getMapper(Class<?> type, Class<? extends TypeMapper> mapperType) {
     final TypeMapper existing = mappers.get(type);
     if (existing != null) {
       return cast(existing);
     } else {
-      final TypeMapper newMapper = instantiateMapper(type);
+      final TypeMapper newMapper;
+      if (mapperType != null) {
+        newMapper = instantiateMapper(type, mapperType);
+      } else {
+        final Y y = type.getAnnotation(Y.class);
+        if (y != null) {
+          newMapper = instantiateMapper(type, y.value());
+        } else {
+          newMapper = mappers.get(Object.class);
+        }
+      }
       mappers.put(type, newMapper);
       return newMapper;
+    }
+  }
+
+  private TypeMapper instantiateMapper(Class<?> type, Class<? extends TypeMapper> mapperType) {
+    try {
+      return mapperType.getDeclaredConstructor().newInstance();
+    } catch (Exception e) {
+      throw new MapperInstantiationException("Error instantiating mapper " + mapperType.getName() + " for type " +
+          type.getName(), e);
     }
   }
 
@@ -135,21 +154,11 @@ public final class MappingContext {
     MapperInstantiationException(String m, Exception cause) { super(m, cause); }
   }
 
-  private TypeMapper instantiateMapper(Class<?> type) {
-    final Y y = type.getAnnotation(Y.class);
-    if (y != null) {
-      try {
-        return cast(y.value().getDeclaredConstructor().newInstance());
-      } catch (Exception e) {
-        throw new MapperInstantiationException("Error instantiating mapper " + y.value().getName() + " for type " +
-            type.getName(), e);
-      }
-    } else {
-      return mappers.get(Object.class);
-    }
+  public <T> T map(Object dom, Class<? extends T> type) {
+    return map(dom, type, null);
   }
 
-  public <T> T map(Object dom, Class<? extends T> type) {
+  public <T> T map(Object dom, Class<? extends T> type, Class<? extends TypeMapper> mapperType) {
     if (dom instanceof YObject) throw new IllegalArgumentException("Cannot map an instance of " + YObject.class.getSimpleName());
 
     if (dom == null) return null;
@@ -166,7 +175,7 @@ public final class MappingContext {
     } else if (type.isEnum()) {
       return cast(Enum.valueOf(cast(type), String.valueOf(dom)));
     } else {
-      final TypeMapper mapper = getMapper(type);
+      final TypeMapper mapper = getMapper(type, mapperType);
       final YObject y = new YObject(dom, this);
       return cast(mapper.map(y, type));
     }

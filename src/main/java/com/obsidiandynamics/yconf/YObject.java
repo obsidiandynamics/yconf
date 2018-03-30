@@ -60,6 +60,10 @@ public final class YObject {
     return context.map(value(), type);
   }
   
+  public <T> T map(Class<? extends T> type, Class<? extends TypeMapper> mapperType) { 
+    return context.map(value(), type, mapperType);
+  }
+  
   public MappingContext getContext() {
     return context;
   }
@@ -123,7 +127,8 @@ public final class YObject {
         if (inj != null) {
           final String name = ! inj.name().isEmpty() ? inj.name() : field.getName();
           final Class<?> type = inj.type() != Void.class ? inj.type() : field.getType();
-          final Object value = getAttribute(name).map(type);
+          final Class<? extends TypeMapper> mapperType = inj.mapper() != NullMapper.class ? inj.mapper() : null;
+          final Object value = getAttribute(name).map(type, mapperType);
           
           if (value != null) {
             field.setAccessible(true);

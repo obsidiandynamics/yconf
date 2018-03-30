@@ -40,7 +40,8 @@ public final class ReflectiveMapper implements TypeMapper {
       if (inj.name().isEmpty()) {
         throw new NoNameSpecifiedException("No name specified for attribute of type " + t.getName());
       }
-      args[i] = y.getAttribute(inj.name()).map(t);
+      final Class<? extends TypeMapper> mapperType = inj.mapper() != NullMapper.class ? inj.mapper() : null;
+      args[i] = y.getAttribute(inj.name()).map(t, mapperType);
     }
 
     final Object target;

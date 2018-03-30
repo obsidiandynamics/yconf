@@ -19,4 +19,5 @@ import java.lang.annotation.*;
 public @interface YInject {
   String name() default "";
   Class<?> type() default Void.class;
+  Class<? extends TypeMapper> mapper() default NullMapper.class;
 }
