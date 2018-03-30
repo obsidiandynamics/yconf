@@ -51,6 +51,7 @@ public final class MappingContext {
     mappers.put(Long.class, new CoercingMapper(Long.class, stripTrailingDecimalFunc().then(Long::parseLong)));
     mappers.put(Map.class, new MapMapper());
     mappers.put(Object.class, (y, type) -> runtimeMapper.map(y, type));
+    mappers.put(Properties.class, new PropertiesMapper());
     mappers.put(short.class, new CoercingMapper(Short.class, stripTrailingDecimalFunc().then(Short::parseShort)));
     mappers.put(Short.class, new CoercingMapper(Short.class, stripTrailingDecimalFunc().then(Short::parseShort)));
     mappers.put(String.class, new CoercingMapper(String.class, s -> s));
