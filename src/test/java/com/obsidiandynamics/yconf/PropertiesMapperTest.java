@@ -13,16 +13,12 @@ public final class PropertiesMapperTest {
 
   @Test
   public void test() throws IOException {
-    final Properties props = new MappingContext()
-    .withParser(reader -> {
-      final Map<String, Object> map = new HashMap<>();
-      map.put("a", "A");
-      map.put("b", false);
-      map.put("c", 100);
-      return map;
-    })
-    .fromReader(null)
-    .map(Properties.class);
+    final Map<String, Object> dom = new HashMap<>();
+    dom.put("a", "A");
+    dom.put("b", false);
+    dom.put("c", 100);
+    
+    final Properties props = new MappingContext().map(dom, Properties.class);
     
     assertEquals(3, props.size());
     assertEquals("A", props.getProperty("a"));

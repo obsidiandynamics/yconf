@@ -149,7 +149,7 @@ public final class MappingContext {
     }
   }
 
-  <T> T map(Object dom, Class<? extends T> type) {
+  public <T> T map(Object dom, Class<? extends T> type) {
     if (dom instanceof YObject) throw new IllegalArgumentException("Cannot map an instance of " + YObject.class.getSimpleName());
 
     if (dom == null) return null;
