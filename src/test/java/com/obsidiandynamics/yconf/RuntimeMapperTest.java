@@ -28,6 +28,7 @@ public final class RuntimeMapperTest {
     final Object obj = new MappingContext()
         .map(Collections.singletonMap("type", RuntimeTestClass.class.getName()), 
              Object.class);
+    
     assertNotNull(obj);
     assertEquals(RuntimeTestClass.class, obj.getClass());
     final RuntimeTestClass r = (RuntimeTestClass) obj;
@@ -48,13 +49,15 @@ public final class RuntimeMapperTest {
   
   @Test
   public void testMap() {
-    final Map<String, String> dom = new LinkedHashMap<>();
-    dom.put("type", RuntimeTestClass.class.getName());
-    dom.put("a", "A");
-    dom.put("b", "B");
-    dom.put("c", "C");
+    final Map<?, ?> dom = new FluentMap<>()
+        .with("type", RuntimeTestClass.class.getName())
+        .with("a", "A")
+        .with("b", "B")
+        .with("c", "C");
+    
     final Object obj = new MappingContext()
         .map(dom, Object.class);
+    
     assertNotNull(obj);
     assertEquals(RuntimeTestClass.class, obj.getClass());
     final RuntimeTestClass r = (RuntimeTestClass) obj;

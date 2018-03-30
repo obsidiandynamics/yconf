@@ -17,19 +17,19 @@ public final class PropsBuilderTest {
         .with("foo", "bar")
         .with("null", null)
         .withSystemDefault("amount", 100);
-    
+
     final Properties props = builder.build();
     assertEquals("bar", props.get("foo"));
     assertEquals(props.toString(), builder.toString());
     assertEquals("100", props.getProperty("amount"));
   }
-  
+
   @Test
   public void testDefault() {
     final Properties defaults = new PropsBuilder()
         .with("amount", 100)
         .build();
-    
+
     final Properties props = new PropsBuilder()
         .withDefault("amount", defaults, 200)
         .withDefault("amountUseSupplied", defaults, 300)
@@ -40,19 +40,17 @@ public final class PropsBuilderTest {
     assertEquals("300", props.getProperty("amountUseSupplied"));
     assertEquals(null, props.getProperty("amountUseNull"));
   }
-  
+
   @Test
   public void testConfig() throws IOException {
     final PropsBuilder builder = new MappingContext()
-        .withParser(reader -> {
-          final Map<String, String> map = new HashMap<>();
-          map.put("a", "A");
-          map.put("b", "B");
-          map.put("c", "C");
-          return map;
-        })
+        .withParser(reader -> new FluentMap<>()
+                    .with("a", "A")
+                    .with("b", "B")
+                    .with("c", "C"))
         .fromReader(null)
         .map(PropsBuilder.class);
+
     assertNotNull(builder);
     assertEquals(new PropsBuilder()
                  .with("a", "A")

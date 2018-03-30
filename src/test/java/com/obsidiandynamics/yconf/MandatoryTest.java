@@ -29,9 +29,9 @@ public final class MandatoryTest {
   
   @Test
   public void testMapperNonNullValue() throws IOException {
-    final Map<String, String> dom = new HashMap<>();
-    dom.put("value", "test");
-    dom.put("error", "bad");
+    final Map<?, ?> dom = new FluentMap<>()
+        .with("value", "test")
+        .with("error", "bad");
     final Object obj = new MappingContext()
         .map(dom, Mandatory.class);
     assertEquals("test", obj);

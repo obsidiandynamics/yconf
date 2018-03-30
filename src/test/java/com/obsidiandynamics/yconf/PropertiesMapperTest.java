@@ -10,10 +10,10 @@ import org.junit.*;
 public final class PropertiesMapperTest {
   @Test
   public void test() throws IOException {
-    final Map<String, Object> dom = new HashMap<>();
-    dom.put("a", "A");
-    dom.put("b", false);
-    dom.put("c", 100);
+    final Map<?, ?> dom = new FluentMap<>()
+        .with("a", "A")
+        .with("b", false)
+        .with("c", 100);
     
     final Properties props = new MappingContext().map(dom, Properties.class);
     

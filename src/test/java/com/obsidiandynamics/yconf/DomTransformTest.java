@@ -40,9 +40,9 @@ public final class DomTransformTest {
 
   @Test
   public void testMap() {
-    final Map<Object, Object> map = new HashMap<>();
-    map.put("f", "foo");
-    map.put("b", "bar");
+    final Map<Object, Object> dom = new FluentMap<>()
+        .with("f", "foo")
+        .with("b", "bar");
     
     class Tuple<K, V> {
       final K k;
@@ -59,11 +59,11 @@ public final class DomTransformTest {
         .withMapper(Map.class, (y, type) -> y.asMap().entrySet().stream()
                     .map(e -> new Tuple<>(e.getKey(), e.getValue().map(String.class)))
                     .collect(Collectors.toMap(t -> t.k, t -> t.v)))
-        .map(map, Map.class);
+        .map(dom, Map.class);
     
-    final Map<Object, Object> upperMap = new HashMap<>();
-    upperMap.put("f", "FOO");
-    upperMap.put("b", "BAR");
+    final Map<?, ?> upperMap = new FluentMap<>()
+        .with("f", "FOO")
+        .with("b", "BAR");
     
     assertEquals(upperMap, out);
   }
