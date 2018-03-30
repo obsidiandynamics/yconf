@@ -7,7 +7,7 @@ Simple, elegant configuration.
 [![codecov](https://codecov.io/gh/obsidiandynamics/yconf/branch/master/graph/badge.svg)](https://codecov.io/gh/obsidiandynamics/yconf)
 
 # About
-YConf is a mapping layer for a one-way conversion of structured documents (XML, JSON, YAML, etc.) into object graphs, specifically optimised for configuration scenarios. It is not a general-purpose object serialisation framework; instead, it's like an ORM for configuration artefacts.
+YConf is a mapping layer for a one-way conversion of structured documents (XML, JSON, YAML, etc.) into object graphs, specifically optimised for configuration scenarios. It is not a general-purpose object serialisation framework; instead, it's like an ORM for configuration artifacts.
 
 YConf currently supports YAML using the [SnakeYAML](https://bitbucket.org/asomov/snakeyaml) parser and JSON using [Gson](https://github.com/google/gson). Other document formats and parsers are relatively trivial to add.
 
@@ -16,7 +16,7 @@ Parsers such as SnakeYAML, Jackson, Gson, Genson, XStream _et al._ already suppo
 
 YConf was designed to provide a parser-agnostic object mapper. With YConf you can switch from one document format to another, and your application is none the wiser. And importantly, your hand-crafted mapping code will continue to work regardless of the underlying library.
 
-YConf standardises type mappings. Your team might support multiple projects with varying configuration needs - different formats, parsers and mappings. Rather than learning the intricacies of every parser, YConf provides a uniform mapping language that works across parsers and document formats.
+YConf standardises type mappings. Your team might support multiple projects with varying configuration needs — different formats, parsers and mappings. Rather than learning the intricacies of every parser, YConf provides a uniform mapping language that works across parsers and document formats.
 
 ## Parametrised Configuration
 That's all well and good, but is an abstraction layer really worth it? So here goes. Decoupling yourself from the parser frees you from its limitations. For instance, can your parser do this?
@@ -85,9 +85,9 @@ You need to add `yconf-core` and at least one other module, depending on the des
 
 We're going to stick to YAML for our examples. Our sample Gradle dependencies resemble the following:
 ```groovy
-compile 'com.obsidiandynamics.yconf:yconf-core:0.2.0'
-compile 'com.obsidiandynamics.yconf:yconf-juel:0.2.0'
-compile 'com.obsidiandynamics.yconf:yconf-snakeyaml:0.2.0'
+compile 'com.obsidiandynamics.yconf:yconf-core:0.3.0'
+compile 'com.obsidiandynamics.yconf:yconf-juel:0.3.0'
+compile 'com.obsidiandynamics.yconf:yconf-snakeyaml:0.3.0'
 ```
 
 ## Field injection
@@ -138,7 +138,7 @@ final Top top = new MappingContext()
 
 Note: we use `.withParser()` to specify the document parser. If using JSON, invoke `.withParser(new GsonParser())`. We've also used JUEL for our DOM transform, which automatically evaluates EL expressions present in the document.
 
-The result of calling `.fromStream()` is a `YObject` instance, which encapsulates the root document object model (DOM) - essentially an object graph derived from the underlying file. This isn't yet what we need. So the last call in the chain is `.map()`, which does the _actual_ work - mapping the DOM to the given `Class` type.
+The result of calling `.fromStream()` is a `YObject` instance, which encapsulates the root document object model (DOM) — essentially an object graph derived from the underlying file. This isn't yet what we need. So the last call in the chain is `.map()`, which does the _actual_ work — mapping the DOM to the given `Class` type.
 
 The `aString` field in our example provides a default value. So if the document omits a value for `aString`, the default assignment will remain. This is really convenient when your configuration has sensible defaults. Beware of one gotcha: if the document provides a value, but that value is `null`, this is treated as the absence of a value. So if `null` happens to be a valid value in your scenario, it would also have to be the default value.
 
@@ -150,8 +150,8 @@ For the above example to work we've had to do a few things:
 
 The `@YInject` annotation has two optional fields:
 
-* `name` - The name of the attribute in the document that will be mapped to the annotated field or parameter. If omitted, the name will be inferred from the annotated field. If the annotation is applied to a [constructor parameter](#user-content-constructor-injection), the name must be set explicitly.
-* `type` - The `Class` type of the mapped object. If omitted, the type will be inferred from the annotated field or parameter.
+* `name` — The name of the attribute in the document that will be mapped to the annotated field or parameter. If omitted, the name will be inferred from the annotated field. If the annotation is applied to a [constructor parameter](#user-content-constructor-injection), the name must be set explicitly.
+* `type` — The `Class` type of the mapped object. If omitted, the type will be inferred from the annotated field or parameter.
 
 ## Constructor injection
 Suppose you can't annotate fields and/or provide a no-arg constructor. Perhaps you are inheriting from a base class over which you have no control. The following is an alternative that uses constructor injection:
@@ -197,7 +197,7 @@ public class Top {
 Constructor injection does not mandate a public no-arg constructor. In fact, it doesn't even require that your constructor is public. It does, however, require that the injected constructor is fully specified in terms of `@YInject` annotations. That is, each of the parameters must be annotated, or the constructor will not be used. At this stage, no behaviour is prescribed for partially annotated constructors or multiple constructors with `@YInject` annotations. This _may_ be supported in future versions.
 
 ## Hybrid injection
-This is basically constructor injection, topped off with field injection - for any annotated fields that weren't set by the constructor. The latter takes place automatically, immediately after object instantiation.
+This is basically constructor injection, topped off with field injection — for any annotated fields that weren't set by the constructor. The latter takes place automatically, immediately after object instantiation.
 
 # Custom Mappings
 The earlier examples assume that the configuration corresponds, more or less, to the resulting object graph. It's also assumed that you have some control over the underlying classes, at least to add the appropriate annotations. Sometimes this isn't the case.
@@ -205,9 +205,9 @@ The earlier examples assume that the configuration corresponds, more or less, to
 ## Type mapping 101
 We need to dissect some of the underlying mechanisms before we go any further. At the heart of YConf there are three main classes:
 
-* `MappingContext` - Holds contextual data about the current mapping session, as well as settings - a registry of type mappers and DOM transforms. When you need to change YConf's behaviour, this is the class you turn to.
-* `YObject` - A wrapper around a section of the underlying document object model (DOM) which, in turn, is the raw output of the parser. If you can visualise the entire DOM as a tree that will be mapped to the root of your resulting object graph, a `YObject` will house a subtree that corresponds to the current point in the graph where the mapper is currently operating.
-* `TypeMapper` - An interface specifying how a `YObject` is mapped to an output object. This is YConf's main extension point - allowing you to specify custom mapping behaviour.
+* `MappingContext` — Holds contextual data about the current mapping session, as well as settings — a registry of type mappers and DOM transforms. When you need to change YConf's behaviour, this is the class you turn to.
+* `YObject` — A wrapper around a section of the underlying document object model (DOM) which, in turn, is the raw output of the parser. If you can visualise the entire DOM as a tree that will be mapped to the root of your resulting object graph, a `YObject` will house a subtree that corresponds to the current point in the graph where the mapper is currently operating.
+* `TypeMapper` — An interface specifying how a `YObject` is mapped to an output object. This is YConf's main extension point — allowing you to specify custom mapping behaviour.
 
 ## Built-in mappers
 ### `RuntimeMapper`
@@ -328,21 +328,21 @@ public final class Mapper implements TypeMapper {
 }
 ```
 
-This is a simple class with one _functional_ method - taking in a DOM fragment and the desired type (which we already know to be `WebConfig`) and outputting a `WebConfig` instance. But before going further, let's pause for a minute to consider how YConf actually works.
+This is a simple class with one _functional_ method — taking in a DOM fragment and the desired type (which we already know to be `WebConfig`) and outputting a `WebConfig` instance. But before going further, let's pause for a minute to consider how YConf actually works.
 
-Behind the scenes, all structured document parsers really deal with just three kinds of elements - **scalars**, **lists** and **maps**. (And where this mightn't be the case, it's relatively straightforward to map the parser's output to a scalar, list or a map.) The scalar is usually either a primitive type or its boxed equivalent, and sometimes simple types such as a `Date` might also be supported natively by the parser. A list is typically an `ArrayList<?>`. A map tends to be a `LinkedHashMap<?, ?>` (to preserve insertion order). 
+Behind the scenes, all structured document parsers really deal with just three kinds of elements — **scalars**, **lists** and **maps**. (And where this mightn't be the case, it's relatively straightforward to map the parser's output to a scalar, list or a map.) The scalar is usually either a primitive type or its boxed equivalent, and sometimes simple types such as a `Date` might also be supported natively by the parser. A list is typically an `ArrayList<?>`. A map tends to be a `LinkedHashMap<?, ?>` (to preserve insertion order). 
 
-Part of YConf's value-add is the assurance that the underlying DOM is either a scalar, a `List<YObject>`, or a `Map<String, YObject>` - irrespective of the native data types that the backing parser might emit. As far as scalars go, the value will be of the widest type and _may_ also come pre-converted, if the parser was under instruction to do so.
+Part of YConf's value-add is the assurance that the underlying DOM is either a scalar, a `List<YObject>`, or a `Map<String, YObject>` — irrespective of the native data types that the backing parser might emit. As far as scalars go, the value will be of the widest type and _may_ also come pre-converted, if the parser was under instruction to do so.
 
 Now that we know the fundamentals, let's take another look at the original document. To us it's now just a list of maps.
 
-The configuration is an array at the top level, so our mapper calls the `asList()` method of the given DOM, which returns a `List<YObject>` - listing each item in the array. Each of the elements is a `Map`, so we use the `mapAttribute()` method to convert the value of an attribute to a specific target type.
+The configuration is an array at the top level, so our mapper calls the `asList()` method of the given DOM, which returns a `List<YObject>` — listing each item in the array. Each of the elements is a `Map`, so we use the `mapAttribute()` method to convert the value of an attribute to a specific target type.
 
 Notice the use of recursion? The `mapAttribute()` method doesn't simply return the raw value; it actually uses the underlying `MappingContext` (embedded within the `YObject` instance) to initiate a deeper query into the DOM which, in turn, will invoke another mapper as required. Also, `mapAttribute("name", String.class)` is just another way of saying `asMap().get("name").map(String.class)`.
 
-After extracting the name, we check that our staging `servers` map doesn't already contain an identically-named entry. If it does, we'll throw a `MappingException` - an unchecked exception that bubble up to our ultimate caller. The rest of the code is fairly trivial; we map the remaining attributes onto local variables, which are then used to construct a `URI`. The requirement to support optional `port` and `path` fields is accommodated by the use of reference types (`Integer` in place of an `int`); the mapper will return `null` if the requested attribute value isn't present in the document, or is explicitly set to `null`.
+After extracting the name, we check that our staging `servers` map doesn't already contain an identically-named entry. If it does, we'll throw a `MappingException` — an unchecked exception that bubble up to our ultimate caller. The rest of the code is fairly trivial; we map the remaining attributes onto local variables, which are then used to construct a `URI`. The requirement to support optional `port` and `path` fields is accommodated by the use of reference types (`Integer` in place of an `int`); the mapper will return `null` if the requested attribute value isn't present in the document, or is explicitly set to `null`.
 
-**Note:** You might be wondering - why does the `map()` method need the `type` parameter, given that our mapper implementation already knows which type it should be dealing with? What else could it be? The reason is that although our custom mapper is very specific, there are other mappers (such as the `CoercingMapper`) that are generic - designed to deal with a variety of types. So knowing the type at runtime may occasionally be necessary.
+**Note:** You might be wondering — why does the `map()` method need the `type` parameter, given that our mapper implementation already knows which type it should be dealing with? What else could it be? The reason is that although our custom mapper is very specific, there are other mappers (such as the `CoercingMapper`) that are generic — designed to deal with a variety of types. So knowing the type at runtime may occasionally be necessary.
 
 The next step is to register our mapper implementation with the `MappingContext`. There are two ways this can be done: using the `@Y` annotation, or by registering directly with the `MappingContext` instance.
 
@@ -432,4 +432,4 @@ Wraps the value of the argument in a `com.obsidiandynamics.yconf.Secret` object.
 
 To unwrap the secret, simply call the static `Secret.unmask(Object)` method, passing in the secret object. The `unmask()` method is fairly flexible, and can be called with a non-`Secret`, returning the given object's `toString()` representation. It's also null-safe; if a `null` is passed in, a `null` is returned.
 
-`Secret` was invented to solve a common problem. Lot's of applications log their configured values during startup. Since logging a secret is undesirable, applications will typically skip over the secret. This works if the application has _a priori_ knowledge of which parameters are secret. But the application might not know this in advance (say, if you're building a framework). In this case, the correct thing to do is to assume that all strings are secret, and explicitly resolve them with `Secret.unmask()` prior to use. Logging the values directly (without unmasking them first) is harmless - it will just print the string `<masked>`.
+`Secret` was invented to solve a common problem. Lot's of applications log their configured values during startup. Since logging a secret is undesirable, applications will typically skip over the secret. This works if the application has _a priori_ knowledge of which parameters are secret. But the application might not know this in advance (say, if you're building a framework). In this case, the correct thing to do is to assume that all strings are secret, and explicitly resolve them with `Secret.unmask()` prior to use. Logging the values directly (without unmasking them first) is harmless — it will just print the string `<masked>`.
