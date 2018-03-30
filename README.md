@@ -344,8 +344,10 @@ After extracting the name, we check that our staging `servers` map doesn't alrea
 
 **Note:** You might be wondering — why does the `map()` method need the `type` parameter, given that our mapper implementation already knows which type it should be dealing with? What else could it be? The reason is that although our custom mapper is very specific, there are other mappers (such as the `CoercingMapper`) that are generic — designed to deal with a variety of types. So knowing the type at runtime may occasionally be necessary.
 
-The next step is to register our mapper implementation with the `MappingContext`. There are two ways this can be done: using the `@Y` annotation, or by registering directly with the `MappingContext` instance.
+## Registering the mapper
+The next step is to register our mapper implementation with the `MappingContext`. There are three ways this can be done: using the `@Y` annotation, registering directly with the `MappingContext` instance, or in-line via the `@YInject` annotation.
 
+### Register with `@Y`
 The example below shows the annotation approach.
 
 ```java
@@ -369,10 +371,46 @@ We've embedded the mapper into the config class for convenience, and have refere
 
 **Note:** Classes referenced from `@Y` must be bean-instantiable. That is, they must be public, have a public no-arg constructor, and must not have an encapsulating instance. The latter is easy to overlook when using a nested class; make sure you're declaring your mapper with the `static` modifier if nesting within another type.
 
-Alternatively, if you don't want to (or can't) add an annotation to your class, the following snippet registers the type mapper directly with the context.
+### Register with `MappingContext`
+Alternatively, if you don't want to (or unable to, for whatever reason) add an annotation to your class, the following snippet registers the type mapper directly with the context.
 ```java
 new MappingContext().withMapper(WebConfig.class, new WebConfig.Mapper())...
 ```
+
+### Registering in-line with `@YInject`
+In come cases we might not have access to `MappingContext` and are also unable to `@Y`-annotate the target type. YConf supports in-line type mapper specification using the `mapper` attribute of `@YInject`. 
+
+In the following example, we'd like to parametrise our configuration with an SLF4J logger, but we're unable to annotate SLF4J's `LoggerFactory` directly (since this class is part of another project). Also, suppose the configuration is loaded by a framework outside of our direct control, so we need to use `@YInject` to specify a custom mapper that fashions a logger for a given name.
+
+```java
+@Y
+public final class LogConfig {
+  @YInject(mapper=LoggerMapper.class)
+  private Logger logger;
+  
+  public Logger getLogger() {
+    return logger;
+  }
+}
+```
+  
+The mapper implementation is shown below.
+
+```java
+public final class LoggerMapper implements TypeMapper {
+  @Override
+  public Object map(YObject y, Class<?> type) {
+    return LoggerFactory.getLogger(y.map(String.class));
+  }
+}
+```
+
+The configuration file looks like this:
+
+```yaml
+logger: org.myproject.MyLogger
+```
+
 
 # Parsing JSON
 Our previous examples have focused on YAML. To parse JSON instead, you need to include the `yconf-gson` module into your build script in place of `yconf-snakeyaml`. You also need to build your `MappingContext` using `.withParser(new GsonParser())`.
