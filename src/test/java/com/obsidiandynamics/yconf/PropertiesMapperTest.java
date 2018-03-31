@@ -7,6 +7,8 @@ import java.util.*;
 
 import org.junit.*;
 
+import com.obsidiandynamics.yconf.util.*;
+
 public final class PropertiesMapperTest {
   @Test
   public void test() throws IOException {

@@ -7,6 +7,7 @@ import java.util.*;
 import org.junit.*;
 
 import com.obsidiandynamics.yconf.RuntimeMapper.*;
+import com.obsidiandynamics.yconf.util.*;
 
 public final class RuntimeMapperTest {
   @Y(RuntimeTestClass.Mapper.class)

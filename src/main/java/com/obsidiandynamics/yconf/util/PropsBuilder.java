@@ -1,4 +1,4 @@
-package com.obsidiandynamics.yconf.props;
+package com.obsidiandynamics.yconf.util;
 
 import java.util.*;
 

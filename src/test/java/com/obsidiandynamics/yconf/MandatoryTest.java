@@ -9,6 +9,7 @@ import org.junit.*;
 
 import com.obsidiandynamics.assertion.*;
 import com.obsidiandynamics.yconf.Mandatory.*;
+import com.obsidiandynamics.yconf.util.*;
 
 public final class MandatoryTest {
   @Test

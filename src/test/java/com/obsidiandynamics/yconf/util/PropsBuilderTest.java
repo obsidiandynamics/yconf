@@ -1,4 +1,4 @@
-package com.obsidiandynamics.yconf.props;
+package com.obsidiandynamics.yconf.util;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;

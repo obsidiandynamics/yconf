@@ -7,6 +7,8 @@ import java.util.stream.*;
 
 import org.junit.*;
 
+import com.obsidiandynamics.yconf.util.*;
+
 public final class DomTransformTest {
   private static final DomTransform STRING_CAPITALIZER = (dom, context) -> {
     if (dom instanceof String) {

@@ -6,6 +6,8 @@ import java.util.*;
 
 import org.junit.*;
 
+import com.obsidiandynamics.yconf.util.*;
+
 public final class ReflectiveMapperTest {
   @Y
   public static class FieldTest {
