@@ -25,6 +25,9 @@ allprojects {
   apply plugin: "jacoco"
   apply plugin: "maven-publish"
   apply plugin: "com.jfrog.bintray"
+  
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
 
   repositories {
     jcenter()
@@ -41,6 +44,10 @@ allprojects {
 
   jacoco {
     toolVersion = "0.8.1"
+  }
+  
+  javadoc {
+    options.addStringOption("quiet", "-html5")
   }
 
   jacocoTestReport {
