@@ -191,15 +191,19 @@ public final class MappingContext {
   }
 
   public YObject fromStream(InputStream stream) throws IOException {
-    ensureParser();
-    final Object root = parser.load(new InputStreamReader(stream));
-    return new YObject(root, this);
+    try (InputStream s = stream) {
+      ensureParser();
+      final Object root = parser.load(new InputStreamReader(stream));
+      return new YObject(root, this);
+    }
   }
 
   public YObject fromReader(Reader reader) throws IOException {
-    ensureParser();
-    final Object root = parser.load(reader);
-    return new YObject(root, this);
+    try (Reader r = reader) {
+      ensureParser();
+      final Object root = parser.load(reader);
+      return new YObject(root, this);
+    }
   }
 
   public YObject fromString(String str) throws IOException {

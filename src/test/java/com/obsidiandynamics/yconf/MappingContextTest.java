@@ -1,5 +1,7 @@
 package com.obsidiandynamics.yconf;
 
+import static org.mockito.Mockito.*;
+
 import java.io.*;
 
 import org.junit.Test;
@@ -40,5 +42,25 @@ public final class MappingContextTest {
     })
     .fromReader(new StringReader(doc))
     .map(Object.class);
+  }
+  
+  @Test
+  public void testInputStreamClose() throws IOException {
+    final InputStream stream = mock(InputStream.class);
+    new MappingContext()
+    .withParser(__ -> null)
+    .fromStream(stream);
+    
+    verify(stream).close();
+  }
+  
+  @Test
+  public void testReaderClose() throws IOException {
+    final Reader reader = mock(Reader.class);
+    new MappingContext()
+    .withParser(__ -> null)
+    .fromReader(reader);
+    
+    verify(reader).close();
   }
 }
