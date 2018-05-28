@@ -13,8 +13,8 @@ import java.lang.annotation.*;
  *  can be inferred from the field being injected. However, when injecting a constructor
  *  parameter, the {@code name} must be supplied.<p>
  *  
- *  The {@code mapper} is always optional, defaulting to the registered type mapper
- *  of the inferred or supplied type.
+ *  The {@code mapper} is optional, defaulting to the registered type mapper
+ *  of the inferred or the supplied type.
  */
 @Documented
 @Retention(RUNTIME)
