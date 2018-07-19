@@ -64,11 +64,6 @@ allprojects {
       csv.enabled false
     }
   }
-
-  // invoke this task when ready to publish to Bintray
-  bintrayUpload {
-    dependsOn ":bintrayCredentialsCheck"
-  }
 }
 
 subprojects {}
@@ -138,7 +133,13 @@ publishing {
       url "${project(':').projectDir}/../repo"
     }
   }
+  
+  // invoke this task when ready to publish to Bintray
+  bintrayUpload {
+    dependsOn ":bintrayCredentialsCheck"
+  }
 }
+
 
 def packageDesc = "Simple, elegant configuration"
 def repoName = "yconf"
