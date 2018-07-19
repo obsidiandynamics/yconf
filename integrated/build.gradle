@@ -49,7 +49,7 @@ publishing {
 
 def envUser = "BINTRAY_USER"
 def envKey = "BINTRAY_KEY"
-def packageDesc = "Integrated tests"
+def packageDesc = "Combined tests"
 def repoName = "yconf"
 bintray {
   user = System.getenv(envUser)
