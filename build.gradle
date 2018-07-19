@@ -35,13 +35,13 @@ allprojects {
   }
   
   ext {
-    fulcrumVersion = "0.16.0"
+    fulcrumVersion = "0.17.0"
   }
   
   dependencies {
     testCompile "com.obsidiandynamics.fulcrum:fulcrum-assert:${fulcrumVersion}"
     testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:2.18.0"
+    testCompile "org.mockito:mockito-core:2.19.1"
   }
 
   jacoco {
