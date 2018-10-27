@@ -3,8 +3,9 @@ version = project(":").version
 
 dependencies {
   compile project(":")
-  compile "de.odysseus.juel:juel-api:2.2.7"
-  compile "de.odysseus.juel:juel-impl:2.2.7"
+  compile "com.obsidiandynamics.fulcrum:fulcrum-func:${fulcrumVersion}"
+  compile "de.odysseus.juel:juel-api:${juelVersion}"
+  compile "de.odysseus.juel:juel-impl:${juelVersion}"
 }
 
 jar {

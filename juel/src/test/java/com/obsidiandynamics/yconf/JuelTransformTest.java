@@ -49,4 +49,24 @@ public final class JuelTransformTest {
       throw new Exception();
     });
   }
+
+  @Test
+  public void testGetEnvExisting() {
+    final String value = JuelTransform.getEnv("HOME", null);
+    assertNotNull(value);
+  }
+
+  @Test
+  public void testGetEnvNonExistent() {
+    final String defaultValue = "someDefaultValue";
+    final String value = JuelTransform.getEnv("GIBB_BB_BBERISH", defaultValue);
+    assertSame(defaultValue, value);
+  }
+
+  @Test
+  public void testNullCoerce() {
+    assertEquals("nonNullString", JuelTransform.nullCoerce("nonNullString"));
+    assertNull(JuelTransform.nullCoerce(null));
+    assertNull(JuelTransform.nullCoerce(""));
+  }
 }

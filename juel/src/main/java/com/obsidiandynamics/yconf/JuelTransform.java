@@ -1,8 +1,12 @@
 package com.obsidiandynamics.yconf;
 
+import static com.obsidiandynamics.func.Functions.*;
+
 import java.lang.reflect.*;
 
 import javax.el.*;
+
+import com.obsidiandynamics.func.*;
 
 import de.odysseus.el.*;
 import de.odysseus.el.util.*;
@@ -18,21 +22,27 @@ public final class JuelTransform implements DomTransform {
   
   @FunctionalInterface
   public interface Configurator {
-    void apply(JuelTransform transform) throws Exception;
+    void apply(JuelTransform transform) throws Throwable;
   }
   
   public void configure(Configurator c) {
-    try {
-      c.apply(this);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    Exceptions.wrap(() -> c.apply(this), RuntimeException::new);
+  }
+  
+  public static String getEnv(String key, String defaultValue) {
+    final String existingValue = nullCoerce(System.getenv(key));
+    return ifAbsent(existingValue, give(defaultValue));
+  }
+  
+  static String nullCoerce(String str) {
+    return str != null && ! str.isEmpty() ? str : null;
   }
   
   private void registerDefaults(JuelTransform transform) throws NoSuchMethodException, SecurityException {
     transform
     .withVariable("env", System.getenv())
     .withVariable("session", session)
+    .withFunction("env", JuelTransform.class.getMethod("getEnv", String.class, String.class))
     .withFunction("mandatory", Mandatory.class.getMethod("of", Object.class, String.class))
     .withFunction("secret", Secret.class.getMethod("of", String.class));
   }
