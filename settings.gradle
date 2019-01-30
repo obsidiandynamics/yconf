@@ -1,5 +1,4 @@
 rootProject.name = "yconf"
-enableFeaturePreview('STABLE_PUBLISHING') // Gradle 5.0 forward compatibility testing
 
 include "yconf-snakeyaml"
 project(":yconf-snakeyaml").projectDir = new File(settingsDir, "snakeyaml")
