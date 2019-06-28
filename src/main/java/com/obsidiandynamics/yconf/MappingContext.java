@@ -159,11 +159,11 @@ public final class MappingContext {
   }
 
   public <T> T map(Object dom, Class<? extends T> type, Class<? extends TypeMapper> mapperType) {
-    if (dom instanceof YObject) throw new IllegalArgumentException("Cannot map an instance of " + YObject.class.getSimpleName());
-
-    if (dom == null) return null;
-
-    if (type.isArray()) {
+    if (dom instanceof YObject) {
+      throw new IllegalArgumentException("Cannot map an instance of " + YObject.class.getSimpleName());
+    } else if (dom == null) {
+      return null;
+    } else if (type.isArray()) {
       final Class<?> componentType = type.getComponentType();
       final List<?> items = (List<?>) dom;
       final List<Object> list = new ArrayList<>(items.size());

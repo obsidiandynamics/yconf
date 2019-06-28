@@ -22,9 +22,16 @@ public final class ReflectiveMapperTest {
 
     private int outOfScope;
   }
+  
+  @Test
+  public void test_castWithoutMapping() {
+    final FieldTest o = new MappingContext()
+        .map(new FieldTest(), FieldTest.class);
+    assertNotNull(o);
+  }
 
   @Test
-  public void testFieldSuccess() {
+  public void test_fieldSuccess() {
     final Map<?, ?> dom = new FluentMap<>()
         .with("numberDefaultName", 100)
         .with("specialNumber", 200)
@@ -52,7 +59,7 @@ public final class ReflectiveMapperTest {
   }
 
   @Test
-  public void testConstructorSuccess() {
+  public void test_constructorSuccess() {
     final Map<?, ?> dom = new FluentMap<>()
         .with("alpha", 100)
         .with("bravo", 200)
@@ -85,7 +92,7 @@ public final class ReflectiveMapperTest {
   }
 
   @Test
-  public void testSealedField() {
+  public void test_sealedField() {
     final Map<?, ?> dom = new FluentMap<>()
         .with("sealed", new FluentMap<>().with("value", 100).with("extraneous", 300));
 
@@ -106,7 +113,7 @@ public final class ReflectiveMapperTest {
   }
 
   @Test
-  public void testSealedConstructor() {
+  public void test_sealedConstructor() {
     final Map<?, ?> dom = new FluentMap<>()
         .with("sealed", new FluentMap<>().with("value", 100).with("extraneous", 300));
 

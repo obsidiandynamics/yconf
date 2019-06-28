@@ -25,6 +25,10 @@ public final class ReflectiveMapper implements TypeMapper {
   
   @Override
   public Object map(YObject y, Class<?> type) {
+    if (y.is(type)) {
+      return y.value();
+    }
+    
     final Constructor<?> constr;
     try {
       constr = getConstructor(type);
