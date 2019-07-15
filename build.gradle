@@ -49,11 +49,11 @@ allprojects {
   }
   
   ext {
-    fulcrumVersion = "0.33.0"
+    fulcrumVersion = "0.34.0"
     gsonVersion = "2.8.5"
     juelVersion = "2.2.7"
     junitVersion = "4.12"
-    mockitoVersion = "2.27.0"
+    mockitoVersion = "3.0.0"
     snakeyamlVersion = "1.24"
   }
   
