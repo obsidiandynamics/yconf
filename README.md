@@ -5,6 +5,7 @@ Simple, elegant configuration.
 [ ![Download](https://api.bintray.com/packages/obsidiandynamics/yconf/yconf-core/images/download.svg) ](https://bintray.com/obsidiandynamics/yconf/yconf-core/_latestVersion)
 [ ![Build](https://travis-ci.org/obsidiandynamics/yconf.svg?branch=master) ](https://travis-ci.org/obsidiandynamics/yconf#)
 [![codecov](https://codecov.io/gh/obsidiandynamics/yconf/branch/master/graph/badge.svg)](https://codecov.io/gh/obsidiandynamics/yconf)
+[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/obsidiandynamics/yconf.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/obsidiandynamics/yconf/context:java)
 
 # About
 YConf is a mapping layer for a one-way conversion of structured documents (XML, JSON, YAML, etc.) into object graphs, specifically optimised for configuration scenarios. It is not a general-purpose object serialisation framework; instead, it's like an ORM for configuration artifacts.
