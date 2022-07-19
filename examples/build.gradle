@@ -1,81 +1,43 @@
 def packageName = "yconf-examples"
-version = project(":").version
+def packageDescription = "Examples"
 
 dependencies {
-  compile project(":yconf-juel")
-  compile project(":yconf-snakeyaml")
-  compile "org.slf4j:slf4j-api:1.7.25"
+  api project(":yconf-juel")
+  api project(":yconf-snakeyaml")
+  api "org.slf4j:slf4j-api:1.7.25"
   
-  testRuntime "org.slf4j:slf4j-log4j12:1.7.25"
-  testRuntime "log4j:log4j:1.2.17"
-}
-
-jar {
-  baseName packageName
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-  baseName packageName
-  classifier = "javadoc"
-  from "$buildDir/docs/javadoc"
-}
- 
-task sourcesJar(type: Jar) {
-  baseName packageName
-  from sourceSets.main.allSource
-  classifier = "sources"
-}
- 
-artifacts {
-  archives jar
-  archives javadocJar
-  archives sourcesJar
+  testImplementation "org.slf4j:slf4j-log4j12:1.7.25"
+  testImplementation "log4j:log4j:1.2.17"
 }
 
 publishing {
   publications {
     mavenJava(MavenPublication) {
-      groupId project(":").group
-      artifactId packageName
-      version project(":").version
+      artifactId = packageName
       from components.java
-      artifact sourcesJar
-      artifact javadocJar
-    }
-  }
-  repositories {
-    maven {
-      url "${project(':').projectDir}/../repo"
-    }
-  }
-}
-
-def envUser = "BINTRAY_USER"
-def envKey = "BINTRAY_KEY"
-def packageDesc = "Examples"
-def repoName = "yconf"
-bintray {
-  user = System.getenv(envUser)
-  key = System.getenv(envKey)
-  publications = ["mavenJava"]
-  pkg {
-    repo = "${repoName}"
-    name = packageName
-    userOrg = "obsidiandynamics"
-    desc = packageDesc
-    websiteUrl = "https://github.com/obsidiandynamics/${repoName}"
-    licenses = ["BSD New"]
-    vcsUrl = "https://github.com/obsidiandynamics/${repoName}"
-    issueTrackerUrl = "https://github.com/obsidiandynamics/${repoName}/issues"
-    publicDownloadNumbers = true
-    githubRepo = "obsidiandynamics/${repoName}"
-    override = true
-    publish = true
-    version {
-      name = project(":").version
-      desc = packageDesc
-      released  = new Date()
-      vcsTag = project(":").version
+      pom {
+        name = packageName
+        description = packageDescription
+        url = 'https://github.com/obsidiandynamics/yconf'
+        licenses {
+          license {
+            name = 'BSD 3-Clause License'
+            url = 'https://opensource.org/licenses/BSD-3-Clause'
+          }
+        }
+        developers {
+          developer {
+            id = 'ekoutanov'
+            name = 'Emil Koutanov'
+            email = 'ekoutanov@gmail.com'
+          }
+        }
+        scm {
+          connection = 'scm:git:git://github.com/obsidiandynamics/yconf.git'
+          developerConnection = 'scm:git:ssh://github.com/obsidiandynamics/yconf.git'
+          url = 'https://github.com/obsidiandynamics/yconf'
+        }
+      }
     }
   }
 }
