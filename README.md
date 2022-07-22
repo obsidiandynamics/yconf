@@ -71,8 +71,8 @@ oversold: ${1 - env.STO_OVERBOUGHT}
 Just add the following snippet to your build file. Replace the version placeholder `x.y.z` in the snippet with the version shown on the Download badge at the top of this README.
 
 ```groovy
-compile 'com.obsidiandynamics.yconf:yconf-core:x.y.z'
-compile 'com.obsidiandynamics.yconf:<module>:x.y.z'
+api 'com.obsidiandynamics.yconf:yconf-core:x.y.z'
+api 'com.obsidiandynamics.yconf:<module>:x.y.z'
 ```
 
 You need to add `yconf-core` and at least one other module, depending on the desired parser. The following is a list of available modules on JCenter.
