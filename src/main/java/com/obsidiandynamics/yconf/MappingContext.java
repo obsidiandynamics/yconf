@@ -14,7 +14,7 @@ public final class MappingContext {
 
   private Parser parser;
 
-  private RuntimeMapper runtimeMapper = new RuntimeMapper();;
+  private RuntimeMapper runtimeMapper = new RuntimeMapper();
 
   public MappingContext() {
     withMappers(defaultMappers());

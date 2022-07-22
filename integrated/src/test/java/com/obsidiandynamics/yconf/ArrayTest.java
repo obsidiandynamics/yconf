@@ -14,7 +14,7 @@ import org.junit.runners.Parameterized.*;
 public final class ArrayTest {
   @Y
   static final class Foo {
-    int num;
+    final int num;
     
     Foo(@YInject(name="num") int num) {
       this.num = num;

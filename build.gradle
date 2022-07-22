@@ -15,7 +15,6 @@ nexusPublishing {
 }
 
 def baseJvmArgs = [
-  "--illegal-access=warn",
   "--add-opens=java.base/java.io=ALL-UNNAMED",
   "--add-opens=java.base/java.lang=ALL-UNNAMED",
   "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
@@ -73,11 +72,6 @@ allprojects {
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
   }
-  
-  tasks.withType(JavaCompile) {
-    options.fork = true
-    options.incremental = true
-  }
 
   test {
     exclude "**/*IT.class"
@@ -115,6 +109,11 @@ task jacocoRootReport(type: JacocoReport) {
   }
   onlyIf = {
     true
+  }
+  afterEvaluate {
+    classDirectories.from = files(classDirectories.files.collect {
+      fileTree(dir: it, exclude: ["sample/**", "**/*Uncovered*"])
+    })
   }
 }
 
