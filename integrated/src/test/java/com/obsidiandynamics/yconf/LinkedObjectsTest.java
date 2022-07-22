@@ -47,7 +47,7 @@ public final class LinkedObjectsTest {
         .map(LinkFrom.class);
     assertNotNull(from);
     assertNotNull(from.link);
-    final LinkTo to = (LinkTo) from.link;
+    final LinkTo to = from.link;
     assertEquals("Some string", to.aString);
   }
 }

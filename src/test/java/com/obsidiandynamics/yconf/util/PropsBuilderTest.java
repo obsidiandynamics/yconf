@@ -1,6 +1,6 @@
 package com.obsidiandynamics.yconf.util;
 
-import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.*;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.*;
@@ -38,7 +38,7 @@ public final class PropsBuilderTest {
 
     assertEquals("100", props.getProperty("amount"));
     assertEquals("300", props.getProperty("amountUseSupplied"));
-    assertEquals(null, props.getProperty("amountUseNull"));
+    assertNull(props.getProperty("amountUseNull"));
   }
 
   @Test

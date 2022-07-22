@@ -213,6 +213,7 @@ public final class MappingTest {
     assertEquals(expected, fb);
   }
 
+  @Test
   public void testWithoutMapper() throws IOException {
     final Object obj = new MappingContext()
         .withParser(parser)

@@ -32,13 +32,13 @@ public final class FixDoublesTest {
   
   @Test
   public void testList() {
-    assertEquals(Arrays.asList(8_000_000_000L), FixDoubles.fix(Arrays.asList(8_000_000_000.0)));
+    assertEquals(Collections.singletonList(8_000_000_000L), FixDoubles.fix(Collections.singletonList(8_000_000_000.0)));
   }
   
   @Test
   public void testMap() {
-    assertEquals(singletonMap(Arrays.asList(8_000_000_000L)), 
-                 singletonMap(FixDoubles.fix(Arrays.asList(8_000_000_000.0))));
+    assertEquals(singletonMap(Collections.singletonList(8_000_000_000L)),
+                 singletonMap(FixDoubles.fix(Collections.singletonList(8_000_000_000.0))));
   }
   
   @Test
