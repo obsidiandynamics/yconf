@@ -2,10 +2,10 @@
 ===
 Simple, elegant configuration.
 
-[ ![Download](https://api.bintray.com/packages/obsidiandynamics/yconf/yconf-core/images/download.svg) ](https://bintray.com/obsidiandynamics/yconf/yconf-core/_latestVersion)
-[ ![Build](https://travis-ci.org/obsidiandynamics/yconf.svg?branch=master) ](https://travis-ci.org/obsidiandynamics/yconf#)
+[![Maven release](https://img.shields.io/maven-metadata/v.svg?color=blue&label=maven-central&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2Fobsidiandynamics%2Fyconf%2Fyconf-core%2Fmaven-metadata.xml)](https://mvnrepository.com/artifact/com.obsidiandynamics.yconf)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/obsidiandynamics/yconf.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/obsidiandynamics/yconf/alerts/)
+[![Gradle build](https://github.com/obsidiandynamics/yconf/actions/workflows/master.yml/badge.svg)](https://github.com/obsidiandynamics/yconf/actions/workflows/master.yml)
 [![codecov](https://codecov.io/gh/obsidiandynamics/yconf/branch/master/graph/badge.svg)](https://codecov.io/gh/obsidiandynamics/yconf)
-[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/obsidiandynamics/yconf.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/obsidiandynamics/yconf/context:java)
 
 # About
 YConf is a mapping layer for a one-way conversion of structured documents (XML, JSON, YAML, etc.) into object graphs, specifically optimised for configuration scenarios. It is not a general-purpose object serialisation framework; instead, it's like an ORM for configuration artifacts.
@@ -68,7 +68,7 @@ oversold: ${1 - env.STO_OVERBOUGHT}
 
 # Getting Started
 ## Getting YConf
-Gradle builds are hosted on JCenter. Just add the following snippet to your build file. Replace the version placeholder `x.y.z` in the snippet with the version shown on the Download badge at the top of this README.
+Just add the following snippet to your build file. Replace the version placeholder `x.y.z` in the snippet with the version shown on the Download badge at the top of this README.
 
 ```groovy
 compile 'com.obsidiandynamics.yconf:yconf-core:x.y.z'
