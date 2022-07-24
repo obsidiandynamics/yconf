@@ -59,7 +59,7 @@ allprojects {
   }
   
   ext {
-    fulcrumVersion = "0.37.0"
+    fulcrumVersion = "0.38.0"
     gsonVersion = "2.8.5"
     juelVersion = "2.2.7"
     junitVersion = "4.12"
